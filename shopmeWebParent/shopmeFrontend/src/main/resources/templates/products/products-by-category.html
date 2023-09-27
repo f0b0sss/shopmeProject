@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <th:block th:insert="~{fragments/head-link :: link}"></th:block>
+    <th:block th:insert="~{fragments/head-script :: script}"></th:block>
+
+    <title>[[${pageTitle}]]</title>
+
+</head>
+<body>
+
+<div class="container-fluid">
+    <div>
+        <div th:insert="~{fragments/menu :: #menu-fragment}"></div>
+    </div>
+
+    <div th:replace="~{products/product_fragments :: search_nav}"></div>
+
+    <div th:replace="~{fragments/breadcrumb :: content}"></div>
+
+    <div class="row text-center">
+        <th:block th:each="cat : ${category.children}">
+            <div class="col-sm-2" th:if="${cat.enabled == true}">
+                <a th:href="@{'/c/' + ${cat.alias}}">
+                    <img th:src="@{${cat.imagePath}}" width="100px">
+                    <br>
+                    <b>[[${cat.name}]]</b>
+                </a>
+            </div>
+        </th:block>
+    </div>
+
+    <div class="row">
+        <div class="col" th:each="cat : ${categoryList}">
+            <div>
+                <img th:src="@{${cat.imagePath}}" width="80px">
+            </div>
+            <div>
+                <a th:href="@{'/c/' + ${cat.alias}}">[[${cat.name}]]</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        &nbsp;
+    </div>
+
+    <div class="row">
+        <th:block th:each="product : ${productList}">
+            <div class="col">
+                <div th:replace="~{products/product_fragments :: product_info}"></div>
+            </div>
+        </th:block>
+    </div>
+
+    <div th:replace="~{fragments/fragments :: pagination('/c/' + ${category.alias},'products')}"></div>
+
+    <div th:insert="~{fragments/footer :: #footer-fragment}"></div>
+</div>
+
+
+</body>
+</html>

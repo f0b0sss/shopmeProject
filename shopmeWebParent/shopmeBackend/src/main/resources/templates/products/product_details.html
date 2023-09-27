@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <th:block th:insert="~{fragments/head-link :: link}"></th:block>
+    <th:block th:insert="~{fragments/head-script :: script}"></th:block>
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="content" id="divProductDetails">
+    <th:block th:each="detail, status : ${product.details}">
+        <div class="row" th:id="'divDetail' + ${status.index}">
+            <input type="hidden" name="detailIds" th:value="${detail.id}">
+            <div class="col">
+                <label class="m-3">Name:</label>
+                <input type="text" class="form-control w-50" name="detailNames" maxlength="255"
+                       th:value="${detail.name}">
+            </div>
+            <div class="col">
+                <label class="m-3">Value:</label>
+                <input type="text" class="form-control w-50" name="detailValues" maxlength="255"
+                       th:value="${detail.value}">
+                <a name="linkRemoveDetail" class="btn fas fa-times-circle fa-2x icon-dark"
+                   title="Remove this detail"></a>
+            </div>
+        </div>
+    </th:block>
+
+    <div class="row" th:id="'divDetail' + ${product.details.size}">
+        <input type="hidden" name="detailIds" value="0">
+        <div class="col">
+            <label class="m-3">Name:</label>
+            <input type="text" class="form-control w-50" name="detailNames" maxlength="255">
+        </div>
+        <div class="col">
+            <label class="m-3">Value:</label>
+            <input type="text" class="form-control w-50" name="detailValues" maxlength="255">
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

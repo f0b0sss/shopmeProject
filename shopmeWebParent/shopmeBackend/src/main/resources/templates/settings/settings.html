@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <th:block th:insert="~{fragments/head-link :: link}"></th:block>
+    <th:block th:insert="~{fragments/head-script :: script}"></th:block>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.bundle.js}"></script>
+    <script type="text/javascript" th:src="@{/richText/jquery.richtext.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/richText/richtext.min.css}">
+
+    <title>Settings Shopme Admin</title>
+
+</head>
+<body>
+
+<div class="container-fluid">
+    <div>
+        <div th:insert="~{fragments/menu :: #menu-fragment}"></div>
+    </div>
+
+    <div>
+        <h2>Site Settings</h2>
+    </div>
+
+    <div th:if="${message != null}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>
+
+    <div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" id="settingTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="tab" href="#general" role="tab">General</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#countries" role="tab">Countries</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#states" role="tab">States</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#mailServer" role="tab">Mail Server</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#mailTemplates" role="tab">Mail Templates</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#payment" role="tab">Payment</a>
+            </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div class="tab-pane active p-3" id="general" role="tabpanel">
+                <div th:replace="~{settings/general :: content}"></div>
+            </div>
+
+            <div class="tab-pane p-3" id="countries" role="tabpanel">
+                <div th:replace="~{settings/countries :: content}"></div>
+            </div>
+
+            <div class="tab-pane" id="states" role="tabpanel">
+                <div th:replace="~{settings/states :: content}"></div>
+            </div>
+
+            <div class="tab-pane" id="mailServer" role="tabpanel">
+                <div th:replace="~{settings/mail-server :: content}"></div>
+            </div>
+
+            <div class="tab-pane" id="mailTemplates" role="tabpanel">
+                <div th:replace="~{settings/mail_templates/mail-templates :: content}"></div>
+            </div>
+
+            <div class="tab-pane" id="payment" role="tabpanel">
+                <h2>Payment</h2>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="toast justify-content-center d-flex" role="alert" aria-live="polite" aria-atomic="true" data-bs-delay="3000">
+        <div role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body">
+                <span id="toastMessage"></span>
+            </div>
+        </div>
+    </div>
+
+    <div th:insert="~{fragments/footer :: #footer-fragment}"></div>
+</div>
+
+
+<script type="text/javascript">
+    MAX_FILE_SIZE = 102400;
+    contextPath = "[[@{/}]]";
+    const csrfHeaderName = "[[${_csrf.headerName}]]";
+    let csrfValue = "[[${_csrf.token}]]";
+    
+    $(document).ready(function () {
+        $("#customerVerificationContent").richText();
+    });
+
+</script>
+<script th:src="@{/js/common_form.js}"></script>
+<script th:src="@{/js/countries_setting.js}"></script>
+<script th:src="@{/js/states_setting.js}"></script>
+</body>
+
+</html>

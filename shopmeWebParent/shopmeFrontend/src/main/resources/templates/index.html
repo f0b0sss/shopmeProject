@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/fragments :: page_head('Home', tag)}">
+</head>
+<body>
+
+<div class="container-fluid">
+    <div>
+        <div th:insert="~{fragments/menu :: #menu-fragment}"></div>
+    </div>
+    <div th:replace="~{products/product_fragments :: search_nav}"></div>
+
+
+    <div>
+        <h2>Shopping by Categories</h2>
+    </div>
+    
+    <div class="row">
+        <div class="col" th:each="cat : ${categoryList}">
+            <div>
+                <img th:src="@{${cat.imagePath}}" width="80px">
+            </div>
+            <div>
+                <a th:href="@{'/c/' + ${cat.alias}}">[[${cat.name}]]</a>
+            </div>
+        </div>
+        
+    </div>
+
+    <div th:insert="~{fragments/footer :: #footer-fragment}"></div>
+</div>
+
+
+</body>
+</html>

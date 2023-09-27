@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <th:block th:insert="~{fragments/head-link :: link}"></th:block>
+    <th:block th:insert="~{fragments/head-script :: script}"></th:block>
+
+    <title>[[${pageTitle}]]</title>
+
+</head>
+<body>
+
+<div class="container-fluid">
+    <div>
+        <div th:insert="~{fragments/menu :: #menu-fragment}"></div>
+    </div>
+    <div th:replace="~{products/product_fragments :: search_nav}"></div>
+
+
+    <div th:if="${totalItems  > 0}">
+        <h2>Search result for '[[${keyword}]]'</h2>
+    </div>
+    <div th:unless="${totalItems  > 0}">
+        <h3>No Match found for '[[${keyword}]]'</h3>
+    </div>
+    
+    <div class="row">
+        <th:block th:each="product : ${resultList}">
+            <div class="col">
+                <div th:replace="~{products/product_fragments :: product_info}"></div>
+            </div>
+        </th:block>
+    </div>
+
+    <div th:replace="~{fragments/fragments :: pagination('/search', 'product')}"></div>
+
+    <div th:insert="~{fragments/footer :: #footer-fragment}"></div>
+</div>
+
+
+</body>
+</html>

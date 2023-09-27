@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <th:block th:insert="~{fragments/head-link :: link}"></th:block>
+  <th:block th:insert="~{fragments/head-script :: script}"></th:block>
+
+  <title>Error - Shopme Admin</title>
+
+</head>
+<body>
+
+<div class="container-fluid">
+  <div>
+    <div th:insert="~{fragments/menu :: #menu-fragment}"></div>
+  </div>
+
+  <div class="m-3">
+    <h2>Sorry, the server has encountered an error while processing your request</h2>
+  </div>
+
+  <div th:insert="~{fragments/footer :: #footer-fragment}"></div>
+</div>
+
+
+</body>
+</html>

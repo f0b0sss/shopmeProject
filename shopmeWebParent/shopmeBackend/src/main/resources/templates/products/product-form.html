@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <th:block th:insert="~{fragments/head-link :: link}"></th:block>
+    <th:block th:insert="~{fragments/head-script :: script}"></th:block>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.bundle.js}"></script>
+    <script type="text/javascript" th:src="@{/richText/jquery.richtext.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/richText/richtext.min.css}">
+
+    <title>[[${pageTitle}]]</title>
+
+</head>
+<body>
+
+<div class="container-fluid">
+    <div>
+        <div th:insert="~{fragments/menu :: #menu-fragment}"></div>
+    </div>
+
+    <div>
+        <h1>Manage Products | [[${pageTitle}]]</h1>
+    </div>
+
+    <div>
+        <form th:action="@{/products/save}" th:object="${product}" method="post" enctype="multipart/form-data"
+              onsubmit="return checkUnique(this)">
+            <input type="hidden" th:field="*{id}">
+            <input th:if="${product.category != null}" type="hidden" id="categoryId" th:value="${product.category.id}">
+            <div>
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#overview" role="tab">Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#description" role="tab">Description</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#images" role="tab">Images</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#details" role="tab">Details</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#shipping" role="tab">Shipping</a>
+                    </li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active p-3" id="overview" role="tabpanel">
+                        <div th:replace="~{products/product_overview :: content}"></div>
+                    </div>
+
+                    <div class="tab-pane" id="description" role="tabpanel">
+                        <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+                            <div th:replace="~{products/product_description :: content}"></div>
+                        </th:block>
+                        <th:block sec:authorize="hasAnyAuthority('Salesperson')">
+                            <div th:replace="~{products/product_description_readonly :: content}"></div>
+                        </th:block>
+                    </div>
+
+                    <div class="tab-pane" id="images" role="tabpanel">
+                        <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+                            <div th:replace="~{products/product_images :: content}"></div>
+                        </th:block>
+                        <th:block sec:authorize="hasAnyAuthority('Salesperson')">
+                            <div th:replace="~{products/product_images_readonly :: content}"></div>
+                        </th:block>
+                    </div>
+
+                    <div class="tab-pane p-3" id="details" role="tabpanel">
+                        <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+                            <div th:replace="~{products/product_details :: content}"></div>
+                        </th:block>
+                        <th:block sec:authorize="hasAnyAuthority('Salesperson')">
+                            <div th:replace="~{products/product_details_readonly :: content}"></div>
+                        </th:block>
+                        <div>
+                            <input type="button" class="btn btn-secondary" value="Add More Detail"
+                                   onclick="addNextDetailSection()">
+                        </div>
+                    </div>
+
+                    <div class="tab-pane p-3" id="shipping" role="tabpanel">
+                        <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+                            <div th:replace="~{products/product_shipping :: content}"></div>
+                        </th:block>
+                        <th:block sec:authorize="hasAnyAuthority('Salesperson')">
+                            <div th:replace="~{products/product_shipping_readonly :: content}"></div>
+                        </th:block>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <input type="submit" th:value="Save" class="btn btn-primary m-3">
+                <input type="button" th:value="Cancel" class="btn btn-secondary" id="buttonCancel">
+            </div>
+        </form>
+
+        <div th:replace="~{html/modal_fragments :: modal_dialog}"></div>
+
+
+    </div>
+    <script type="text/javascript">
+        MAX_FILE_SIZE = 502400;
+
+        moduleURL = "[[@{/products}]]";
+        brandModuleURL = "[[@{/brands}]]";
+        defaultImageThumbnailSrc = "[[@{/images/image-thumbnail.png}]]"
+        checkUniqueUrl = "[[@{/products/check-unique}]]";
+    </script>
+    <script th:src="@{/js/common_form.js}"></script>
+    <script th:src="@{/js/product_form_overview.js}"></script>
+    <script th:src="@{/js/product_form_images.js}"></script>
+    <script th:src="@{/js/product_form_details.js}"></script>
+
+
+    <div th:insert="~{fragments/footer :: #footer-fragment}"></div>
+</div>
+
+
+</body>
+
+</html>

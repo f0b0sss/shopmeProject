@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/fragments :: page_head(${pageTitle}, tag)}">
+</head>
+<body>
+
+<div class="container-fluid">
+    <div>
+        <div th:insert="~{fragments/menu :: #menu-fragment}"></div>
+    </div>
+
+    <div>&nbsp;</div>
+    <div class="text-center">
+        <h2>Customer Registration</h2>
+        <h4>You have registered successfully as a customer.</h4>
+        <p>Please check your email to verify account.</p>
+        <p><a th:href="@{/login}">Login here</a></p>
+    </div>
+
+
+    <div th:insert="~{fragments/footer :: #footer-fragment}"></div>
+</div>
+
+
+</body>
+</html>
