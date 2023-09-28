@@ -75,6 +75,7 @@ public class ProductController {
         model.addAttribute("sortField", "name");
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("moduleUrl", "/products");
 
         return "products/products";
     }

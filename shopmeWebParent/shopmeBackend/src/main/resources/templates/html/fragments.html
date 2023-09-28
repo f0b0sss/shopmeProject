@@ -10,9 +10,9 @@
 </head>
 <body>
 
-<th th:fragment="column_link(moduleUrl, fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
+<th th:fragment="column_link(fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
     <a class="text-white text-decoration-none"
-       th:href="@{'/' + ${moduleUrl} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}">
+       th:href="@{${moduleUrl} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}">
         [[${columnLabel}]]
     </a>
     <span th:if="${sortField == fieldName}"
@@ -20,7 +20,7 @@
     </span>
 </th>
 
-<a th:fragment="page_link(moduleUrl, pageNum, label)"
+<a th:fragment="page_link(pageNum, label)"
    class="page-link"
    th:href="@{${moduleUrl} + '/page/' + ${pageNum} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}">
     [[${label}]]
@@ -29,12 +29,12 @@
 <div th:fragment="status(enabled, entityName, entityURL)" th:remove="tag">
     <a th:if="${enabled == true}"
        class="fas fa-check-circle fa-2x icon-green"
-       th:href="@{${entityURL} + '/enabled/false'}"
+       th:href="@{${moduleUrl} + '/enabled/false'}"
        th:title="'Disable ' + ${entityName}">
     </a>
     <a th:if="${enabled == false}"
        class="fas fa-circle fa-2x icon-dark"
-       th:href="@{${entityURL} + '/enabled/true'}"
+       th:href="@{${moduleUrl} + '/enabled/true'}"
        th:title="'Enable ' + ${entityName}">
     </a>
 </div>
@@ -55,7 +55,7 @@
     </th:block>
 </div>
 
-<div th:fragment="pagination(moduleUrl, entityName)" th:remove="tag">
+<div th:fragment="pagination(entityName)" th:remove="tag">
     <div class="text-center m-1" th:if="${totalItems > 0}">
         <span>Showing [[${entityName}]] # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
     </div>
@@ -67,31 +67,31 @@
         <nav>
             <ul class="pagination justify-content-center flex-wrap">
                 <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="~{html/fragments :: page_link(${moduleUrl}, 1, 'First')}"></a>
+                    <a th:replace="~{html/fragments :: page_link(1, 'First')}"></a>
                 </li>
                 <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="~{html/fragments :: page_link(${moduleUrl}, ${currentPage - 1}, 'Previous')}"></a>
+                    <a th:replace="~{html/fragments :: page_link(${currentPage - 1}, 'Previous')}"></a>
                 </li>
 
                 <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}"
                     th:each="i : ${#numbers.sequence(1, totalPages)}">
-                    <a th:replace="~{html/fragments :: page_link(${moduleUrl}, ${i}, ${i})}">
+                    <a th:replace="~{html/fragments :: page_link(${i}, ${i})}">
                         <span th:class="${currentPage == i ? 'sr-only' : 'page-item'}"></span>
                     </a>
                 </li>
                 <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="~{html/fragments :: page_link(${moduleUrl}, ${currentPage + 1}, 'Next')}"></a>
+                    <a th:replace="~{html/fragments :: page_link(${currentPage + 1}, 'Next')}"></a>
                 </li>
                 <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="~{html/fragments :: page_link(${moduleUrl}, ${totalPages}, 'Last')}"></a>
+                    <a th:replace="~{html/fragments :: page_link(${totalPages}, 'Last')}"></a>
                 </li>
             </ul>
         </nav>
     </div>
 </div>
 
-<div th:fragment="search_form_and_message(moduleURL)">
-    <form th:action="@{${moduleURL}}" class="form-check-inline m-3">
+<div th:fragment="search_form_and_message">
+    <form th:action="@{${moduleUrl} + '/page/1'}" class="form-check-inline m-3">
         <input type="hidden" name="sortField" th:value="${sortField}">
         <input type="hidden" name="sortDir" th:value="${sortDir}">
         Filter:&nbsp;

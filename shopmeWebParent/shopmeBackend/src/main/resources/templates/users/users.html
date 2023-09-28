@@ -28,23 +28,23 @@
         <a th:href="@{/users/export/pdf}" class="fas fa-file-pdf fa-2x icon-dark mr-2"></a>
     </div>
 
-    <div th:replace="~{html/fragments :: search_form_and_message('/users/page/1')}"></div>
+    <div th:replace="~{html/fragments :: search_form_and_message}"></div>
 
     <div class="full-details">
         <table class="table table-bordered table-striped table-hover table-responsive-xl">
             <thead class="table-header table-dark">
             <th class="hideable-column">
-            <th th:replace="~{html/fragments :: column_link('users','id', 'User ID', 'tag')}"></th>
+            <th th:replace="~{html/fragments :: column_link('id', 'User ID', 'tag')}"></th>
             </th>
 
             <th>Photos</th>
             <th class="hideable-column">
-            <th th:replace="~{html/fragments :: column_link('users','email', 'Email', 'tag')}"></th>
+            <th th:replace="~{html/fragments :: column_link('email', 'Email', 'tag')}"></th>
             </th>
-            <th th:replace="~{html/fragments :: column_link('users','firstname', 'Firstname', 'none')}"></th>
-            <th th:replace="~{html/fragments :: column_link('users','lastname', 'Lastname', 'none')}"></th>
+            <th th:replace="~{html/fragments :: column_link('firstname', 'Firstname', 'none')}"></th>
+            <th th:replace="~{html/fragments :: column_link('lastname', 'Lastname', 'none')}"></th>
             <th>Roles</th>
-            <th th:replace="~{html/fragments :: column_link('users','enabled', 'Enabled', 'none')}"></th>
+            <th th:replace="~{html/fragments :: column_link('enabled', 'Enabled', 'none')}"></th>
             <th></th>
             </thead>
             <tbody>
@@ -95,7 +95,7 @@
     </div>
 
 
-    <div th:insert="~{html/fragments :: pagination('/users', 'users')}"></div>
+    <div th:insert="~{html/fragments :: pagination('users')}"></div>
 
     <div th:replace="~{html/modal_fragments :: confirm_modal}"></div>
 

@@ -62,15 +62,15 @@
             <thead class="table-header table-dark">
             <tr>
                 <th class="hideable-column">
-                <th th:replace="~{html/fragments :: column_link('products','id', 'ID', 'tag')}"></th>
+                <th th:replace="~{html/fragments :: column_link('id', 'ID', 'tag')}"></th>
                 </th>
                 <th>Image</th>
-                <th th:replace="~{html/fragments :: column_link('products','name', 'Product Name', 'none')}"></th>
+                <th th:replace="~{html/fragments :: column_link('name', 'Product Name', 'none')}"></th>
                 <th class="hideable-column">
-                <th th:replace="~{html/fragments :: column_link('products','brand', 'Brand', 'tag')}"></th>
+                <th th:replace="~{html/fragments :: column_link('brand', 'Brand', 'tag')}"></th>
                 </th>
                 <th class="hideable-column">
-                <th th:replace="~{html/fragments :: column_link('products','category', 'Category', 'tag')}"></th>
+                <th th:replace="~{html/fragments :: column_link('category', 'Category', 'tag')}"></th>
                 </th>
 
                 <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
@@ -147,7 +147,7 @@
         </tr>
     </div>
 
-    <div th:replace="~{html/fragments :: pagination('/products','products')}"></div>
+    <div th:replace="~{html/fragments :: pagination('products')}"></div>
 
     <div th:replace="~{html/modal_fragments :: confirm_modal}"></div>
 

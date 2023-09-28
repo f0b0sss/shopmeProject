@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Service
-public class CustomerServiceImpl implements CustomerService{
+public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -34,7 +34,7 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
-    public boolean isEmailUnique(String email){
+    public boolean isEmailUnique(String email) {
         Customer customer = customerRepository.findByEmail(email);
 
         return customer == null;
@@ -57,5 +57,17 @@ public class CustomerServiceImpl implements CustomerService{
         String encodedPassword = passwordEncoder.encode(customer.getPassword());
 
         customer.setPassword(encodedPassword);
+    }
+
+     @Override
+    public boolean verify(String verificationCode) {
+        Customer customer = customerRepository.findByVerificationCode(verificationCode);
+
+        if(customer == null || customer.isEnabled()){
+            return false;
+        } else {
+            customerRepository.enable(customer.getId());
+            return true;
+        }
     }
 }

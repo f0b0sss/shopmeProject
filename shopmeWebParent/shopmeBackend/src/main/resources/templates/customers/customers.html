@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <th:block th:insert="~{fragments/head-link :: link}"></th:block>
+    <th:block th:insert="~{fragments/head-script :: script}"></th:block>
+
+    <title>Customers - Shopme Admin</title>
+
+</head>
+<body>
+
+<div class="container-fluid">
+    <div>
+        <div th:insert="~{fragments/menu :: #menu-fragment}"></div>
+    </div>
+
+    <div>
+        <h1>Manage Customers</h1>
+        <a th:href="@{/customers/export/csv}" class="fas fa-file-csv fa-2x icon-dark mr-2"></a>
+    </div>
+
+    <div th:replace="~{html/fragments :: search_form_and_message}"></div>
+
+    <div class="full-details">
+        <table class="table table-bordered table-striped table-hover table-responsive-xl">
+            <thead class="table-header table-dark">
+            <tr>
+                <th th:replace="~{html/fragments :: column_link(id', 'ID', 'none')}"></th>
+                <th th:replace="~{html/fragments :: column_link(firstname', 'First Name', 'none')}"></th>
+                <th th:replace="~{html/fragments :: column_link(lastname', 'Last Name', 'none')}"></th>
+
+                <th class="hideable-column">
+                <th th:replace="~{html/fragments :: column_link('email', 'Email', 'tag')}"></th>
+                </th>
+
+                <th class="hideable-column">
+                <th th:replace="~{html/fragments :: column_link('city', 'City', 'tag')}"></th>
+                </th>
+
+                <th class="hideable-column">
+                <th th:replace="~{html/fragments :: column_link('state', 'State', 'tag')}"></th>
+                </th>
+
+                <th th:replace="~{html/fragments :: column_link('country', 'Country', 'none')}"></th>
+                <th th:replace="~{html/fragments :: column_link('enabled', 'Enabled', 'none')}"></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="customer : ${customerList}">
+                <td>[[${customer.id}]]</td>
+                <td>[[${customer.firstname}]]</td>
+                <td>[[${customer.lastname}]]</td>
+                <td class="hideable-column">[[${customer.email}]]</td>
+                <td class="hideable-column">[[${customer.city}]]</td>
+                <td class="hideable-column">[[${customer.state}]]</td>
+                <td>[[${customer.country.name}]]</td>
+                <td>
+                    <div th:replace="~{html/fragments :: status(${customer.enabled}, 'customer','/customers/' + ${customer.id})}"></div>
+                </td>
+                <td>
+                    <a class="fas fa-file-alt fa-2x icon-green link-detail"
+                       th:href="@{'/customers/detail/' + ${customer.id}}" title="View details of this customer">
+                    </a>
+                    &nbsp;
+                    <div th:replace="~{html/fragments :: edit('customer','/customers/' + ${customer.id})}"></div>
+                    &nbsp;
+                    <div th:replace="~{html/fragments :: delete('customer', ${customer.id}, '/customers/delete/' + ${customer.id}, true)}"></div>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="less-details">
+        <tr th:each="customer : ${customerList}">
+            <div class="col-4">
+                <span><b>[[${customer.fullName}]]</b></span>
+            </div>
+            <div class="col-8">
+                <div class="mb-1">
+                    <span><b>[[${customer.country.name}]]</b></span>
+                </div>
+            </div>
+            <div>
+                <div th:replace="~{html/fragments :: status(${customer.enabled}, 'customer','/customers/' + ${customer.id})}"></div>
+                &nbsp;
+                <a class="fas fa-file-alt fa-2x icon-green link-detail"
+                   th:href="@{'/customers/detail/' + ${customer.id}}" title="View details of this customer">
+                </a>
+                &nbsp;
+                <div th:replace="~{html/fragments :: edit('customer','/customers/' + ${customer.id})}"></div>
+                &nbsp;
+                <div th:replace="~{html/fragments :: delete('customer', ${customer.id}, '/customers/delete/' + ${customer.id}, true)}"></div>
+            </div>
+        </tr>
+    </div>
+
+    <div th:replace="~{html/fragments :: pagination('customer')}"></div>
+
+    <div th:replace="~{html/modal_fragments :: confirm_modal}"></div>
+
+    <div class="modal" id="detailModal">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+
+    <div th:insert="~{fragments/footer :: #footer-fragment}"></div>
+</div>
+
+<script th:src="@{/js/common_list.js}"></script>
+<script>
+    moduleURL = "[[@{/customers}]]";
+
+    $(document).ready(function () {
+        $(".link-delete").on("click", function (e) {
+            e.preventDefault();
+            showDeleteConfirmModal($(this), 'customer');
+        })
+
+        $(".link-detail").on("click", function (e) {
+            e.preventDefault();
+            linkDetailUrl = $(this).attr("href");
+            $("#detailModal").modal('show').find(".modal-content").load(linkDetailUrl);
+        });
+    });
+</script>
+
+</body>
+</html>

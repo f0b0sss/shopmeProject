@@ -79,7 +79,21 @@ function changeFormStateToSelectCountry() {
     fieldCountryCode.val(countryCode);
 }
 
+function validateFormCountry() {
+    formCountry = document.getElementById("formCountry");
+    if (!formCountry.checkValidity()){
+        formCountry.reportValidity();
+        return false;
+    }
+
+    return true;
+}
+
 function addCountry() {
+    if (!validateFormCountry()){
+        return;
+    }
+
     url = contextPath + "countries/save";
 
     countryName = fieldCountryName.val();
@@ -125,6 +139,10 @@ function selectNewlyCountry(countryId, countryCode, countryName) {
 }
 
 function updateCountry() {
+    if (!validateFormCountry()){
+        return;
+    }
+
     url = contextPath + "countries/save";
 
     countryName = fieldCountryName.val();

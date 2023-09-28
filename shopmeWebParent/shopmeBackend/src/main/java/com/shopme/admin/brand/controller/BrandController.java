@@ -67,6 +67,7 @@ public class BrandController {
         model.addAttribute("sortField", "name");
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("moduleUrl", "/brands");
 
         return "brands/brands";
     }
