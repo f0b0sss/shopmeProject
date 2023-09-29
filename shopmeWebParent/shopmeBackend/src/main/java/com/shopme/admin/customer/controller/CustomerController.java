@@ -1,18 +1,20 @@
 package com.shopme.admin.customer.controller;
 
 import com.shopme.admin.customer.service.CustomerService;
-import com.shopme.admin.customer.service.CustomerServiceImpl;
+import com.shopme.admin.paging.PagingAndSortingHelper;
+import com.shopme.admin.paging.PagingAndSortingParam;
 import com.shopme.admin.setting.country.service.CountryService;
 import com.shopme.admin.setting.setting.service.SettingService;
-import com.shopme.common.entity.*;
+import com.shopme.common.entity.Country;
+import com.shopme.common.entity.Customer;
 import com.shopme.common.exception.CustomerNotFoundException;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -30,40 +32,15 @@ public class CustomerController {
     @Autowired
     private SettingService settingService;
 
-    @GetMapping()
-    public String listFirstPage(Model model) {
-        return listAllByPage(1, "firstname", "asc", null, model);
+    @GetMapping
+    public String listAllFirstPage() {
+        return "redirect:/customers/page/1?sortField=firstname&sortDir=asc";
     }
 
-
     @GetMapping("/page/{pageNum}")
-    public String listAllByPage(@PathVariable int pageNum,
-                                @Param("sortField") String sortField,
-                                @Param("sortDir") String sortDir,
-                                @Param("keyword") String keyword,
-                                Model model) {
-        Page<Customer> page = customerService.listAllByPage(pageNum, sortField, sortDir, keyword);
-        List<Customer> customerList = page.getContent();
-
-        long startCount = (long) (pageNum - 1) * CustomerServiceImpl.CUSTOMERS_PER_PAGE + 1;
-        long endCount = startCount + CustomerServiceImpl.CUSTOMERS_PER_PAGE - 1;
-        if (endCount > page.getTotalElements()) {
-            endCount = page.getTotalElements();
-        }
-
-        String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
-
-        model.addAttribute("customerList", customerList);
-        model.addAttribute("reverseSortDir", reverseSortDir);
-        model.addAttribute("totalItems", page.getTotalElements());
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("currentPage", pageNum);
-        model.addAttribute("startCount", startCount);
-        model.addAttribute("endCount", endCount);
-        model.addAttribute("sortField", "firstname");
-        model.addAttribute("sortDir", sortDir);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("moduleUrl", "/customers");
+    public String listAllByPage(@PagingAndSortingParam(listName = "customerList", moduleUrl = "/customers") PagingAndSortingHelper helper,
+                                @PathVariable int pageNum) {
+        customerService.listAllByPage(pageNum, helper);
 
         return "customers/customers";
     }

@@ -1,8 +1,10 @@
 package com.shopme.admin.user.controller;
 
 import com.shopme.admin.FileUploadUtil;
+import com.shopme.admin.paging.PagingAndSortingHelper;
+import com.shopme.admin.paging.PagingAndSortingParam;
 import com.shopme.admin.user.exception.UserNotFoundException;
-import com.shopme.admin.user.service.*;
+import com.shopme.admin.user.service.UserService;
 import com.shopme.admin.user.service.export.UserCsvExporter;
 import com.shopme.admin.user.service.export.UserExcelExporter;
 import com.shopme.admin.user.service.export.UserPDFExporter;
@@ -10,8 +12,6 @@ import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -30,37 +30,14 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public String listAllFirstPage(Model model) {
-        return listAllByPage(1, model, "firstname", "asc", null);
+    public String listAllFirstPage() {
+        return "redirect:/users/page/1?sortField=firstname&sortDir=asc";
     }
 
     @GetMapping("/page/{pageNum}")
-    public String listAllByPage(@PathVariable int pageNum, Model model,
-                                @Param("sortField") String sortField,
-                                @Param("sortDir") String sortDir,
-                                @Param("keyword") String keyword) {
-        Page<User> page = userService.listAllByPage(pageNum, sortField, sortDir, keyword);
-        List<User> listUsers = page.getContent();
-
-        long startCount = (pageNum - 1) * UserServiceImpl.USERS_PER_PAGE + 1;
-        long endCount = startCount + UserServiceImpl.USERS_PER_PAGE - 1;
-        if (endCount > page.getTotalElements()){
-            endCount = page.getTotalElements();
-        }
-
-        String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
-
-        model.addAttribute("totalItems", page.getTotalElements());
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("startCount", startCount);
-        model.addAttribute("endCount", endCount);
-        model.addAttribute("currentPage", pageNum);
-        model.addAttribute("listUsers", listUsers);
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDir", sortDir);
-        model.addAttribute("reverseSortDir", reverseSortDir);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("moduleUrl", "/users");
+    public String listAllByPage(@PagingAndSortingParam(listName = "listUsers", moduleUrl = "/users") PagingAndSortingHelper helper,
+                                @PathVariable int pageNum) {
+        userService.listAllByPage(pageNum, helper);
 
         return "users/users";
     }

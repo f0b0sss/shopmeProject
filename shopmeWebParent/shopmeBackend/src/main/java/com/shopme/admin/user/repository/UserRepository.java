@@ -1,15 +1,13 @@
 package com.shopme.admin.user.repository;
 
+import com.shopme.admin.paging.SearchRepository;
 import com.shopme.common.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends SearchRepository<User, Long> {
 
     User getUserByEmail(String email);
 

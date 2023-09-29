@@ -1,14 +1,13 @@
 package com.shopme.admin.product.service;
 
+import com.shopme.admin.paging.PagingAndSortingHelper;
 import com.shopme.admin.product.repository.ProductRepository;
 import com.shopme.common.entity.Product;
 import com.shopme.common.exception.ProductNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -28,29 +27,28 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<Product> listAllByPage(int pageNum, String sortField, String sortDir, String keyword,
-                                       Long categoryId) {
-        Sort sort = Sort.by(sortField);
-
-        sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
-
-        Pageable pageable = PageRequest.of(pageNum - 1, PRODUCTS_PER_PAGE, sort);
+    public void listAllByPage(int pageNum, PagingAndSortingHelper helper, Long categoryId) {
+        Pageable pageable = helper.createPageable(PRODUCTS_PER_PAGE, pageNum);
+        String keyword = helper.getKeyword();
+        Page<Product> page = null;
 
         if (keyword != null && !keyword.isEmpty()) {
             if (categoryId != null && categoryId > 0){
                 String categoryIdMatch = "-" + categoryId + "-";
-                return repository.searchInCategory(categoryId, categoryIdMatch, keyword, pageable);
+                page = repository.searchInCategory(categoryId, categoryIdMatch, keyword, pageable);
+            }else {
+                page = repository.findAllByKeyword(keyword, pageable);
             }
-
-            return repository.findAllByKeyword(keyword, pageable);
         }
 
         if (categoryId != null && categoryId > 0){
             String categoryIdMatch = "-" + categoryId + "-";
-            return repository.findAllInCategory(categoryId, categoryIdMatch, pageable);
+            page =  repository.findAllInCategory(categoryId, categoryIdMatch, pageable);
+        }else {
+            page =  repository.findAll(pageable);
         }
 
-        return repository.findAll(pageable);
+        helper.updateModelAttributes(pageNum, page);
     }
 
     @Override

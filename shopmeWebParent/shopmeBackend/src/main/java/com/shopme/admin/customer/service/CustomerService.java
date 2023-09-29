@@ -1,11 +1,11 @@
 package com.shopme.admin.customer.service;
 
+import com.shopme.admin.paging.PagingAndSortingHelper;
 import com.shopme.common.entity.Customer;
 import com.shopme.common.exception.CustomerNotFoundException;
-import org.springframework.data.domain.Page;
 
 public interface CustomerService {
-    Page<Customer> listAllByPage(int pageNum, String sortField, String sortDir, String keyword);
+    void listAllByPage(int pageNum, PagingAndSortingHelper helper);
 
     void updateEnabledStatus(Long id, boolean enabled);
 

@@ -1,16 +1,15 @@
 package com.shopme.admin.product.service;
 
+import com.shopme.admin.paging.PagingAndSortingHelper;
 import com.shopme.common.entity.Product;
 import com.shopme.common.exception.ProductNotFoundException;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface ProductService {
     List<Product> listAll();
 
-    Page<Product> listAllByPage(int pageNum, String sortField, String sortDir, String keyword, Long categoryId);
-
+    void listAllByPage(int pageNum, PagingAndSortingHelper helper, Long categoryId);
     Product get(Long id) throws ProductNotFoundException;
 
     Product save(Product product);

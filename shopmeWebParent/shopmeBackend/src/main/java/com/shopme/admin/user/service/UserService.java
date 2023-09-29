@@ -1,16 +1,16 @@
 package com.shopme.admin.user.service;
 
+import com.shopme.admin.paging.PagingAndSortingHelper;
 import com.shopme.admin.user.exception.UserNotFoundException;
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface UserService {
     List<User> listAll();
 
-    Page<User> listAllByPage(int pageNum, String sortField, String sortDir, String keyword);
+    void listAllByPage(int pageNum, PagingAndSortingHelper helper);
 
     List<Role> listRoles();
 

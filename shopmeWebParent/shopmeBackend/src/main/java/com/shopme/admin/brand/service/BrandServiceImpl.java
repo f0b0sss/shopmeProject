@@ -2,12 +2,9 @@ package com.shopme.admin.brand.service;
 
 import com.shopme.admin.brand.exception.BrandNotFoundException;
 import com.shopme.admin.brand.repository.BrandRepository;
+import com.shopme.admin.paging.PagingAndSortingHelper;
 import com.shopme.common.entity.Brand;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,18 +23,8 @@ public class BrandServiceImpl implements BrandService{
     }
 
     @Override
-    public Page<Brand> listAllByPage(int pageNum, String sortField, String sortDir, String keyword) {
-        Sort sort = Sort.by(sortField);
-
-        sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
-
-        Pageable pageable = PageRequest.of(pageNum - 1, BRANDS_PER_PAGE, sort);
-
-        if (keyword != null && !keyword.isEmpty()) {
-            return repository.findAllByKeyword(keyword, pageable);
-        }
-
-        return repository.findAll(pageable);
+    public void listAllByPage(int pageNum, PagingAndSortingHelper helper) {
+        helper.listEntities(pageNum, BRANDS_PER_PAGE, repository);
     }
 
     @Override

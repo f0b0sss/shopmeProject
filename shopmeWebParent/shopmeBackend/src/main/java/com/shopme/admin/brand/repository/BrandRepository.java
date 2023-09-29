@@ -1,14 +1,14 @@
 package com.shopme.admin.brand.repository;
 
+import com.shopme.admin.paging.SearchRepository;
 import com.shopme.common.entity.Brand;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface BrandRepository extends JpaRepository<Brand, Long> {
+public interface BrandRepository extends SearchRepository<Brand, Long> {
 
     Brand findByName(String name);
     Long countById(Long id);

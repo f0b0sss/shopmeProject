@@ -1,13 +1,10 @@
 package com.shopme.admin.customer.service;
 
 import com.shopme.admin.customer.repository.CustomerRepository;
+import com.shopme.admin.paging.PagingAndSortingHelper;
 import com.shopme.common.entity.Customer;
 import com.shopme.common.exception.CustomerNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,17 +20,8 @@ public class CustomerServiceImpl implements CustomerService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public Page<Customer> listAllByPage(int pageNum, String sortField, String sortDir, String keyword) {
-        Sort sort = Sort.by(sortField);
-        sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
-
-        Pageable pageable = PageRequest.of(pageNum - 1, CUSTOMERS_PER_PAGE, sort);
-
-        if (keyword != null && !keyword.isEmpty()) {
-            return customerRepository.findAllByKeyword(keyword, pageable);
-        }
-
-        return customerRepository.findAll(pageable);
+    public void listAllByPage(int pageNum, PagingAndSortingHelper helper) {
+        helper.listEntities(pageNum, CUSTOMERS_PER_PAGE, customerRepository);
     }
 
     @Override

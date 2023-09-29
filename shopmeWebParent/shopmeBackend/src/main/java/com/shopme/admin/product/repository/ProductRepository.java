@@ -1,13 +1,13 @@
 package com.shopme.admin.product.repository;
 
+import com.shopme.admin.paging.SearchRepository;
 import com.shopme.common.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ProductRepository extends SearchRepository<Product, Long> {
 
     @Query("select p from Product p where p.name like %?1% " +
             "or p.shortDescription like %?1%" +

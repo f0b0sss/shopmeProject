@@ -1,15 +1,15 @@
 package com.shopme.admin.brand.service;
 
 import com.shopme.admin.brand.exception.BrandNotFoundException;
+import com.shopme.admin.paging.PagingAndSortingHelper;
 import com.shopme.common.entity.Brand;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface BrandService {
     List<Brand> listAll();
 
-    Page<Brand> listAllByPage(int pageNum, String sortField, String sortDir, String keyword);
+    void listAllByPage(int pageNum, PagingAndSortingHelper helper);
 
     Brand get(Long id) throws BrandNotFoundException;
 
