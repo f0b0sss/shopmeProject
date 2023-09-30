@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/fragments :: page_head(${pageTitle}, tag)}">
+</head>
+<body>
+
+<div class="container-fluid text-center">
+    <div>
+        <div th:insert="~{fragments/menu :: #menu-fragment}"></div>
+    </div>
+
+    <div>&nbsp;</div>
+
+    <div th:if="${title != null}">
+        <h3>[[${title}]]</h3>
+    </div>
+
+    <div th:if="${message != null}">
+        <h3>[[${message}]]</h3>
+    </div>
+
+    <div>&nbsp;</div>
+
+
+
+
+    <div th:insert="~{fragments/footer :: #footer-fragment}"></div>
+</div>
+</body>
+</html>

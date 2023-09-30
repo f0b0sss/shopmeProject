@@ -2,6 +2,7 @@ package com.shopme.customer.service;
 
 import com.shopme.common.entity.AuthenticationType;
 import com.shopme.common.entity.Customer;
+import com.shopme.common.exception.CustomerNotFoundException;
 
 public interface CustomerService {
     Customer findByEmail(String email);
@@ -21,4 +22,10 @@ public interface CustomerService {
                                       AuthenticationType authenticationType);
 
     void update(Customer customerInForm);
+
+    String updateResetPasswordToken(String email) throws CustomerNotFoundException;
+
+    Customer getByResetPasswordToken(String token);
+
+    void updatePassword(String token, String newPassword) throws CustomerNotFoundException;
 }

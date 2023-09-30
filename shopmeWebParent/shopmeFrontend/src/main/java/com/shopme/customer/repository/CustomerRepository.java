@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Customer findByEmail(String email);
 
+    Customer findByResetPasswordToken(String token);
     Customer findByVerificationCode(String code);
 
     @Query("update Customer c set c.enabled = true, c.verificationCode = null where c.id = ?1")

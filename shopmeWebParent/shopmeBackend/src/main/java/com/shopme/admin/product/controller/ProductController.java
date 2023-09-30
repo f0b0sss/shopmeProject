@@ -47,7 +47,7 @@ public class ProductController {
 
         List<Category> categoryList = categoryService.listCategoriesUsedInForm();
 
-        if (categoryId != null){
+        if (categoryId != null) {
             model.addAttribute("categoryId", categoryId);
         }
 
@@ -73,7 +73,7 @@ public class ProductController {
 
     @PostMapping("/save")
     public String saveProduct(Product product,
-                              @RequestParam (required = false) MultipartFile fileImage,
+                              @RequestParam(required = false) MultipartFile fileImage,
                               @RequestParam(value = "extraImage", required = false) MultipartFile[] extraImages,
                               @RequestParam(name = "detailIds", required = false) String[] detailIds,
                               @RequestParam(required = false) String[] detailNames,
@@ -82,8 +82,8 @@ public class ProductController {
                               @RequestParam(name = "imageNames", required = false) String[] imageNames,
                               @AuthenticationPrincipal ShopmeUserDetails loggedUser,
                               RedirectAttributes redirectAttributes) throws IOException {
-        if (!loggedUser.hasRole("Admin") && !loggedUser.hasRole("Editor")){
-            if (loggedUser.hasRole("Salesperson")){
+        if (!loggedUser.hasRole("Admin") && !loggedUser.hasRole("Editor")) {
+            if (loggedUser.hasRole("Salesperson")) {
                 productService.saveProductPrice(product);
 
                 redirectAttributes.addFlashAttribute("message", "The product has been saved successfully.");
@@ -101,7 +101,7 @@ public class ProductController {
 
         ProductSaveHelper.saveUploadedImages(fileImage, extraImages, savedProduct);
 
-        if (product.getId() != null){
+        if (product.getId() != null) {
             ProductSaveHelper.deleteExtraImagesWhereRemovedOnForm(product);
         }
 
@@ -114,12 +114,22 @@ public class ProductController {
 
 
     @GetMapping("/{id}")
-    public String editProduct(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
+    public String editProduct(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes,
+                              @AuthenticationPrincipal ShopmeUserDetails loggedUser) {
         try {
             Product product = productService.get(id);
             List<Brand> brandList = brandService.listAll();
             Integer numberOfExistingExtraImages = product.getImages().size();
 
+            boolean isReadOnlyForSalesperson = false;
+
+            if (!loggedUser.hasRole("Admin") && !loggedUser.hasRole("Editor")) {
+                if (loggedUser.hasRole("Salesperson")) {
+                    isReadOnlyForSalesperson = true;
+                }
+            }
+
+            model.addAttribute("isReadOnlyForSalesperson", isReadOnlyForSalesperson);
             model.addAttribute("product", product);
             model.addAttribute("brandList", brandList);
             model.addAttribute("numberOfExistingExtraImages", numberOfExistingExtraImages);

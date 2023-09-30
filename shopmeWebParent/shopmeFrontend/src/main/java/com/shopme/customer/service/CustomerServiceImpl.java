@@ -2,6 +2,7 @@ package com.shopme.customer.service;
 
 import com.shopme.common.entity.AuthenticationType;
 import com.shopme.common.entity.Customer;
+import com.shopme.common.exception.CustomerNotFoundException;
 import com.shopme.customer.repository.CustomerRepository;
 import com.shopme.setting.repository.CountryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,17 +119,17 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void update(Customer customerInForm){
+    public void update(Customer customerInForm) {
         Customer customerInDB = customerRepository.findById(customerInForm.getId()).get();
 
-        if (customerInDB.getAuthenticationType().equals(AuthenticationType.DATABASE)){
-            if (customerInForm.getPassword().isEmpty()){
+        if (customerInDB.getAuthenticationType().equals(AuthenticationType.DATABASE)) {
+            if (customerInForm.getPassword().isEmpty()) {
                 String encodedPassword = passwordEncoder.encode(customerInForm.getPassword());
                 customerInForm.setPassword(encodedPassword);
-            }else {
+            } else {
                 customerInForm.setPassword(customerInDB.getPassword());
             }
-        }else {
+        } else {
             customerInForm.setPassword(customerInDB.getPassword());
         }
 
@@ -139,5 +140,42 @@ public class CustomerServiceImpl implements CustomerService {
         customerInForm.setResetPasswordToken(customerInDB.getResetPasswordToken());
 
         customerRepository.save(customerInForm);
+    }
+
+    @Override
+    public String updateResetPasswordToken(String email) throws CustomerNotFoundException {
+        Customer customer = customerRepository.findByEmail(email);
+
+        if (customer != null) {
+            String token = UUID.randomUUID().toString();
+            customer.setResetPasswordToken(token);
+
+            customerRepository.save(customer);
+
+            return token;
+        } else {
+            throw new CustomerNotFoundException("Could not find any customer with email " + email);
+        }
+    }
+
+    @Override
+    public Customer getByResetPasswordToken(String token){
+        return customerRepository.findByResetPasswordToken(token);
+    }
+
+    @Override
+    public void updatePassword(String token, String newPassword) throws CustomerNotFoundException {
+        Customer customer = customerRepository.findByResetPasswordToken(token);
+
+        if (customer == null) {
+            throw new CustomerNotFoundException("No Customer Found: Invalid token");
+        }else {
+            customer.setPassword(newPassword);
+            customer.setResetPasswordToken(null);
+
+            encodePassword(customer);
+
+            customerRepository.save(customer);
+        }
     }
 }
