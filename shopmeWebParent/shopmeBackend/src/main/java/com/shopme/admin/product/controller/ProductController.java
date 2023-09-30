@@ -36,7 +36,7 @@ public class ProductController {
 
     @GetMapping
     public String listAllFirstPage() {
-        return "redirect:/products/page/1?sortField=firstname&sortDir=asc&categoryId=0";
+        return "redirect:/products/page/1?sortField=name&sortDir=asc&categoryId=0";
     }
 
     @GetMapping("/page/{pageNum}")

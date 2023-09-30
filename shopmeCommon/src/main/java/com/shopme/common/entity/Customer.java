@@ -17,13 +17,13 @@ public class Customer {
     @Column(nullable = false, length = 64)
     private String password;
 
-    @Column(name = "first_name", length = 45)
+    @Column(name = "first_name", nullable = false, length = 45)
     private String firstname;
 
-    @Column(name = "last_name", length = 45)
+    @Column(name = "last_name", nullable = false, length = 45)
     private String lastname;
 
-    @Column(name = "phone_number", unique = true, length = 45)
+    @Column(name = "phone_number", length = 45)
     private String phoneNumber;
 
     @Column(nullable = false, length = 64)
@@ -38,7 +38,7 @@ public class Customer {
     @Column(nullable = false, length = 45)
     private String state;
 
-    @Column(name = "postal_code", nullable = false, length = 10)
+    @Column(name = "postal_code", length = 10)
     private String postalCode;
 
     @Column(name = "verification_code", length = 64)
@@ -52,6 +52,13 @@ public class Customer {
     @ManyToOne
     @JoinColumn(name = "country_id")
     private Country country;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "authentication_type", length = 10)
+    private AuthenticationType authenticationType;
+
+    @Column(name = "reset_password_token", length = 30)
+    private String resetPasswordToken;
 
     public Customer() {
     }
@@ -176,6 +183,22 @@ public class Customer {
         this.country = country;
     }
 
+    public AuthenticationType getAuthenticationType() {
+        return authenticationType;
+    }
+
+    public void setAuthenticationType(AuthenticationType authenticationType) {
+        this.authenticationType = authenticationType;
+    }
+
+    public String getResetPasswordToken() {
+        return resetPasswordToken;
+    }
+
+    public void setResetPasswordToken(String resetPasswordToken) {
+        this.resetPasswordToken = resetPasswordToken;
+    }
+
     @Override
     public String toString() {
         return "Customer{" +
@@ -185,6 +208,7 @@ public class Customer {
                 ", lastname='" + lastname + '\'' +
                 '}';
     }
+
     public String getFullName() {
         return firstname + " " + lastname;
     }

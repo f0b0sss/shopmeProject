@@ -1,5 +1,6 @@
 package com.shopme.customer.repository;
 
+import com.shopme.common.entity.AuthenticationType;
 import com.shopme.common.entity.Customer;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,9 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     @Modifying
     @Transactional
     void enable(Long id);
+
+    @Query("update Customer c set c.authenticationType = ?2 where c.id = ?1")
+    @Modifying
+    @Transactional
+    void updateAuthenticationType(Long customerId, AuthenticationType type);
 }

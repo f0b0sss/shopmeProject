@@ -13,9 +13,7 @@
 <body>
 
 <div class="container-fluid">
-  <div>
-    <div th:insert="~{fragments/menu :: #menu-fragment}"></div>
-  </div>
+  <div th:replace="~{fragments/navigation :: header_menu}"></div>
 
   <div class="m-3">
     <h2>Sorry, the server has encountered an error while processing your request</h2>

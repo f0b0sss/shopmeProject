@@ -1,5 +1,6 @@
 package com.shopme.customer.service;
 
+import com.shopme.common.entity.AuthenticationType;
 import com.shopme.common.entity.Customer;
 
 public interface CustomerService {
@@ -14,4 +15,10 @@ public interface CustomerService {
     void registerCustomer(Customer customer);
 
     boolean verify(String verificationCode);
+
+    void updateAuthenticationType(Customer customer, AuthenticationType type);
+    void addNewCustomerUponOAuthLogin(String name, String email, String countryCode,
+                                      AuthenticationType authenticationType);
+
+    void update(Customer customerInForm);
 }

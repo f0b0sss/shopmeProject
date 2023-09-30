@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <th:block th:insert="~{fragments/head-link :: link}"></th:block>
+    <th:block th:insert="~{fragments/head-script :: script}"></th:block>
+    <title>Title</title>
+</head>
+<body>
+
+<div th:fragment="header_menu">
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+        <a class="navbar-brand" th:href="@{/}">
+            <img th:src="@{${SITE_LOGO}}" alt="shopme logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavBar"
+                aria-controls="topNavBar"
+                aria-expanded="false">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="topNavBar">
+            <ul class="navbar-nav">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="">Careers</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="">Payments</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="">Shipping &amp; Delivery</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/login}">Login</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/register}">Register</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<div th:fragment="search_nav" class="row">
+    <div class="col-auto bg-light">
+        <th:block sec:authorize="isAuthenticated()">
+            <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+                <input type="submit" value="Logout">
+            </form>
+        </th:block>
+
+        <nav class="navbar navbar-expand-sm">
+            <div class="collapse navbar-collapse" id="searchNavbar">
+                <form class="input-group" th:action="@{/search}" method="get">
+                    <input type="search" name="keyword" class="form-control mr-sm-2"
+                           th:value="${keyword}" placeholder="keyword" required>
+                    <input type="submit" value="Search" class="btn btn-outline-success">
+                </form>
+                <ul class="navbar-nav">
+                    <th:block sec:authorize="isAuthenticated()">
+                        <li class="nav-item">
+                            <b>
+                                <a class="nav-link" th:href="@{/account_details}" sec:authentication="principal.fullName"></a>
+                            </b>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="@{/articles}">Addresses</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="@{/articles}">Questions</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="@{/articles}">Reviews</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="@{/articles}">Orders</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="@{/articles}">Cart</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="javascript: document.logoutForm.submit()">Logout</a>
+                        </li>
+                    </th:block>
+                </ul>
+            </div>
+
+        </nav>
+    </div>
+</div>
+
+
+</body>
+</html>

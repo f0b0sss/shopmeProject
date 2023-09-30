@@ -4,7 +4,6 @@ import com.shopme.admin.customer.service.CustomerService;
 import com.shopme.admin.paging.PagingAndSortingHelper;
 import com.shopme.admin.paging.PagingAndSortingParam;
 import com.shopme.admin.setting.country.service.CountryService;
-import com.shopme.admin.setting.setting.service.SettingService;
 import com.shopme.common.entity.Country;
 import com.shopme.common.entity.Customer;
 import com.shopme.common.exception.CustomerNotFoundException;
@@ -28,9 +27,6 @@ public class CustomerController {
 
     @Autowired
     private CountryService countryService;
-
-    @Autowired
-    private SettingService settingService;
 
     @GetMapping
     public String listAllFirstPage() {

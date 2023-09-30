@@ -29,9 +29,9 @@
         <table class="table table-bordered table-striped table-hover table-responsive-xl">
             <thead class="table-header table-dark">
             <tr>
-                <th th:replace="~{html/fragments :: column_link(id', 'ID', 'none')}"></th>
-                <th th:replace="~{html/fragments :: column_link(firstname', 'First Name', 'none')}"></th>
-                <th th:replace="~{html/fragments :: column_link(lastname', 'Last Name', 'none')}"></th>
+                <th th:replace="~{html/fragments :: column_link('id', 'ID', 'none')}"></th>
+                <th th:replace="~{html/fragments :: column_link('firstname', 'First Name', 'none')}"></th>
+                <th th:replace="~{html/fragments :: column_link('lastname', 'Last Name', 'none')}"></th>
 
                 <th class="hideable-column">
                 <th th:replace="~{html/fragments :: column_link('email', 'Email', 'tag')}"></th>

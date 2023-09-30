@@ -10,22 +10,6 @@
 </head>
 <body>
 
-<div th:fragment="search_nav" class="row">
-    <div class="col-md">
-        <nav class="navbar navbar-expand-sm bg-light">
-            <div class="collapse navbar-collapse" id="searchNavBar">
-                <form class="form-row" th:action="@{/search}" method="get">
-                    <input type="search" name="keyword" class="form-control mr-sm-2"
-                           th:value="${keyword}"
-                           required placeholder="keyword">
-                    <input type="submit" value="Search" class="btn btn-outline-success">
-                </form>
-            </div>
-        </nav>
-    </div>
-</div>
-
-
 <div th:fragment="product_info" class="col-sm-2">
     <div>
         <a th:href="@{'/p/' + ${product.alias}}">

@@ -1,6 +1,6 @@
 package com.shopme.customer.controller;
 
-import com.shopme.customer.service.CountryService;
+import com.shopme.setting.service.CountryService;
 import com.shopme.customer.service.CustomerService;
 import com.shopme.setting.state.service.StateService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.shopme.customer.service;
+package com.shopme.setting.service;
 
 import com.shopme.common.entity.Country;
 

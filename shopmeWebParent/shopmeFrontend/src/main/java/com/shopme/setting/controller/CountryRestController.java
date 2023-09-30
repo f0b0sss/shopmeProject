@@ -3,7 +3,7 @@ package com.shopme.setting.controller;
 import com.shopme.common.entity.Country;
 import com.shopme.common.entity.State;
 import com.shopme.common.entity.dto.StateDTO;
-import com.shopme.customer.service.CountryService;
+import com.shopme.setting.service.CountryService;
 import com.shopme.setting.state.service.StateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -24,4 +24,5 @@ public interface CategoryService {
     void updateEnabledStatus(Long id, boolean enabled);
 
     String checkUnique(Long id, String name, String alias);
+
 }
