@@ -59,6 +59,13 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductDetail> details = new ArrayList<>();
 
+    public Product() {
+    }
+
+    public Product(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }
