@@ -2,7 +2,6 @@ package com.shopme.admin.category.controller;
 
 import com.shopme.admin.category.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,9 +12,7 @@ public class CategoryRestController {
     private CategoryService categoryService;
 
     @PostMapping("/categories/check-unique")
-    public String checkUnique(@Param("id") Long id,
-                              @Param("name") String name,
-                              @Param("alias") String alias) {
+    public String checkUnique(Long id, String name, String alias) {
         return categoryService.checkUnique(id, name, alias);
     }
 }

@@ -20,3 +20,4 @@ function addToCart() {
         showErrorModal("Error while adding product to shopping cart");
     });
 }
+

@@ -7,7 +7,6 @@ import com.shopme.admin.brand.service.BrandService;
 import com.shopme.common.entity.Brand;
 import com.shopme.common.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,8 +23,7 @@ public class BrandRestController {
     private BrandService service;
 
     @PostMapping("/brands/check-unique")
-    public String checkUnique(@Param("id") Long id,
-                              @Param("name") String name) {
+    public String checkUnique(Long id, String name) {
         return service.checkUnique(id, name);
     }
 
