@@ -86,7 +86,8 @@ public class ShippingRateController {
                                    RedirectAttributes ra) {
         try {
             shippingRateService.updateCODSupport(id, supported);
-            ra.addFlashAttribute("message", "COD support for shipping rate ID " + id + " has been updated.");
+            ra.addFlashAttribute("message",
+                    "COD support for shipping rate ID " + id + " has been updated.");
         } catch (ShippingRateNotFoundException ex) {
             ra.addFlashAttribute("message", ex.getMessage());
         }
@@ -97,7 +98,8 @@ public class ShippingRateController {
     public String deleteRate(@PathVariable Long id, RedirectAttributes ra) {
         try {
             shippingRateService.deleteById(id);
-            ra.addFlashAttribute("message", "The shipping rate ID " + id + " has been deleted.");
+            ra.addFlashAttribute("message",
+                    "The shipping rate ID " + id + " has been deleted.");
         } catch (ShippingRateNotFoundException ex) {
             ra.addFlashAttribute("message", ex.getMessage());
         }

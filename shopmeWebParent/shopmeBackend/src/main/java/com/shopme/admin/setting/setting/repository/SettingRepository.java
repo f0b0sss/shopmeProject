@@ -1,7 +1,7 @@
 package com.shopme.admin.setting.setting.repository;
 
 import com.shopme.common.entity.Setting;
-import com.shopme.common.entity.SettingCategory;
+import com.shopme.common.entity.enums.SettingCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

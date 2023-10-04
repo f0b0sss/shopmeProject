@@ -1,5 +1,6 @@
 package com.shopme.common.entity;
 
+import com.shopme.common.entity.enums.SettingCategory;
 import jakarta.persistence.*;
 
 import java.util.Objects;

@@ -1,7 +1,7 @@
 package com.shopme.setting.service;
 
 import com.shopme.common.entity.Setting;
-import com.shopme.common.entity.SettingCategory;
+import com.shopme.common.entity.enums.SettingCategory;
 import com.shopme.setting.EmailSettingBag;
 import com.shopme.setting.repository.SettingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
