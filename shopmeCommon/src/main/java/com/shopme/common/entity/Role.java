@@ -6,11 +6,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "roles")
-public class Role {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Role extends IdBasedEntity{
 
     @Column(length = 40, nullable = false, unique = true)
     private String name;
@@ -32,14 +28,6 @@ public class Role {
     public Role(String name, String description) {
         this.name = name;
         this.description = description;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {

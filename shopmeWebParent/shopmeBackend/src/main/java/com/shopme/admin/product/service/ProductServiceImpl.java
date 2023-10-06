@@ -2,7 +2,7 @@ package com.shopme.admin.product.service;
 
 import com.shopme.admin.paging.PagingAndSortingHelper;
 import com.shopme.admin.product.repository.ProductRepository;
-import com.shopme.common.entity.Product;
+import com.shopme.common.entity.product.Product;
 import com.shopme.common.exception.ProductNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

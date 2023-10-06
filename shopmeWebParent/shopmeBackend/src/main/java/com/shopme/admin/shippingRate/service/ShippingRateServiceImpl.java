@@ -3,7 +3,7 @@ package com.shopme.admin.shippingRate.service;
 import com.shopme.admin.paging.PagingAndSortingHelper;
 import com.shopme.admin.product.repository.ProductRepository;
 import com.shopme.admin.shippingRate.repository.ShippingRateRepository;
-import com.shopme.common.entity.Product;
+import com.shopme.common.entity.product.Product;
 import com.shopme.common.entity.ShippingRate;
 import com.shopme.common.exception.ShippingRateAlreadyExistsException;
 import com.shopme.common.exception.ShippingRateNotFoundException;
@@ -42,10 +42,8 @@ public class ShippingRateServiceImpl implements ShippingRateService {
     public ShippingRate save(ShippingRate shippingRate) throws ShippingRateAlreadyExistsException {
         ShippingRate rateInDB = shippingRateRepository.findByCountryAndState(shippingRate.getCountry().getId(), shippingRate.getState());
 
-        boolean foundExistingRateInNewMode = shippingRate.getId() == null &&
-                rateInDB != null;
-        boolean foundDifferentExistingRateInEditMode = shippingRate.getId() != null &&
-                rateInDB != null && !rateInDB.equals(shippingRate);
+        boolean foundExistingRateInNewMode = shippingRate.getId() == null && rateInDB != null;
+        boolean foundDifferentExistingRateInEditMode = shippingRate.getId() != null && rateInDB != null && rateInDB.equals(shippingRate);
 
         if (foundExistingRateInNewMode || foundDifferentExistingRateInEditMode) {
             throw new ShippingRateAlreadyExistsException("There's already a rate for the destination "

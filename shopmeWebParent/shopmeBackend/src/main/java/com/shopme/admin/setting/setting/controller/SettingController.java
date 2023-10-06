@@ -5,7 +5,7 @@ import com.shopme.admin.setting.GeneralSettingBag;
 import com.shopme.admin.setting.setting.service.CurrencyService;
 import com.shopme.admin.setting.setting.service.SettingService;
 import com.shopme.common.entity.Currency;
-import com.shopme.common.entity.Setting;
+import com.shopme.common.entity.setting.Setting;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -108,7 +108,7 @@ public class SettingController {
                 "Mail Sever settings have been saved successfully."
         );
 
-        return "redirect:/settings";
+        return "redirect:/settings#mailServer";
     }
 
     @PostMapping("/save-mail-template")
@@ -121,7 +121,20 @@ public class SettingController {
                 "Mail template settings have been saved successfully."
         );
 
-        return "redirect:/settings";
+        return "redirect:/settings#mailTemplates";
+    }
+
+    @PostMapping("/save_payment")
+    public String savePaymentSettings(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        List<Setting> paymentSettings = settingService.getPaymentSettings();
+        updateSettingValuesFromForm(request, paymentSettings);
+
+        redirectAttributes.addFlashAttribute(
+                "message",
+                "Payment settings have been saved successfully."
+        );
+
+        return "redirect:/settings#payment";
     }
 
 }

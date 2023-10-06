@@ -1,4 +1,4 @@
-package com.shopme.common.entity.enums;
+package com.shopme.common.entity;
 
 public enum AuthenticationType {
     DATABASE, GOOGLE, FACEBOOK

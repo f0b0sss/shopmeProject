@@ -32,6 +32,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/products", "/products/", "/products/detail/**", "/products/page/**").hasAnyAuthority("Admin", "Editor", "Salesperson", "Shipper")
                 .requestMatchers("/products/save", "/products/edit/**", "/products/check_unique").hasAnyAuthority("Admin", "Editor", "Salesperson")
                 .requestMatchers("/products/new", "/products/delete/**").hasAnyAuthority("Admin", "Editor")
+                .requestMatchers("/customers/**", "/orders/**").hasAnyAuthority("Admin", "Salesperson")
                 .requestMatchers("/css/**", "/images/**", "/js/**", "/webfonts/**", "/fontawesome/**", "/webjars/**", "/richText/**").permitAll()
 //                .anyRequest().permitAll()
                 .anyRequest().authenticated()

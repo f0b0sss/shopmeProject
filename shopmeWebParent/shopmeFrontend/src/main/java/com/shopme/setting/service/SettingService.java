@@ -1,6 +1,6 @@
 package com.shopme.setting.service;
 
-import com.shopme.common.entity.Setting;
+import com.shopme.common.entity.setting.Setting;
 import com.shopme.setting.EmailSettingBag;
 
 import java.util.List;

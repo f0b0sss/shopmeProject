@@ -1,20 +1,19 @@
-package com.shopme.common.entity;
+package com.shopme.common.entity.order;
 
+import com.shopme.common.entity.IdBasedEntity;
+import com.shopme.common.entity.product.Product;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "order_details")
-public class OrderDetail {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class OrderDetail extends IdBasedEntity {
 
     private int quantity;
 
-    private float productCoast;
-    private float shippingCoast;
+    private float productCost;
+    private float shippingCost;
     private float unitPrice;
-    private float subTotal;
+    private float subtotal;
 
     @ManyToOne
     @JoinColumn(name = "produc_id")
@@ -24,14 +23,6 @@ public class OrderDetail {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public int getQuantity() {
         return quantity;
     }
@@ -40,20 +31,20 @@ public class OrderDetail {
         this.quantity = quantity;
     }
 
-    public float getProductCoast() {
-        return productCoast;
+    public float getProductCost() {
+        return productCost;
     }
 
-    public void setProductCoast(float productCoast) {
-        this.productCoast = productCoast;
+    public void setProductCost(float productCost) {
+        this.productCost = productCost;
     }
 
-    public float getShippingCoast() {
-        return shippingCoast;
+    public float getShippingCost() {
+        return shippingCost;
     }
 
-    public void setShippingCoast(float shippingCoast) {
-        this.shippingCoast = shippingCoast;
+    public void setShippingCost(float shippingCost) {
+        this.shippingCost = shippingCost;
     }
 
     public float getUnitPrice() {
@@ -64,12 +55,12 @@ public class OrderDetail {
         this.unitPrice = unitPrice;
     }
 
-    public float getSubTotal() {
-        return subTotal;
+    public float getSubtotal() {
+        return subtotal;
     }
 
-    public void setSubTotal(float subTotal) {
-        this.subTotal = subTotal;
+    public void setSubtotal(float subtotal) {
+        this.subtotal = subtotal;
     }
 
     public Product getProduct() {

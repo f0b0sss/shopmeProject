@@ -116,8 +116,12 @@ public class CustomerController {
         String redirectOption = request.getParameter("redirect");
         String redirectURL = "redirect:/account_details";
 
-        if (redirectOption.equals("address_book")){
+        if ("address_book".equals(redirectOption)) {
             redirectURL =  "redirect:/address_book";
+        }else   if ("cart".equals(redirectOption)) {
+            redirectURL =  "redirect:/cart";
+        }else   if ("checkout".equals(redirectOption)) {
+            redirectURL =  "redirect:/address_book?redirect=checkout";
         }
 
         redirectAttributes.addFlashAttribute("message", "Your account details haves been updated.");

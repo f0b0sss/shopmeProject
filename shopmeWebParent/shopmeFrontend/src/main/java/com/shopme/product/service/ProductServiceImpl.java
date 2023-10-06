@@ -1,6 +1,6 @@
 package com.shopme.product.service;
 
-import com.shopme.common.entity.Product;
+import com.shopme.common.entity.product.Product;
 import com.shopme.common.exception.ProductNotFoundException;
 import com.shopme.product.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;

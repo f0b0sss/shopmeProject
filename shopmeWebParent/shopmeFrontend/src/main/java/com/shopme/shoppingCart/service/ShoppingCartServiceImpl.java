@@ -2,7 +2,7 @@ package com.shopme.shoppingCart.service;
 
 import com.shopme.common.entity.CartItem;
 import com.shopme.common.entity.Customer;
-import com.shopme.common.entity.Product;
+import com.shopme.common.entity.product.Product;
 import com.shopme.common.exception.ShoppingCartException;
 import com.shopme.product.repository.ProductRepository;
 import com.shopme.shoppingCart.repository.CartItemRepository;

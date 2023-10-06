@@ -1,7 +1,7 @@
 package com.shopme.admin.product.service;
 
 import com.shopme.admin.paging.PagingAndSortingHelper;
-import com.shopme.common.entity.Product;
+import com.shopme.common.entity.product.Product;
 import com.shopme.common.exception.ProductNotFoundException;
 
 import java.util.List;

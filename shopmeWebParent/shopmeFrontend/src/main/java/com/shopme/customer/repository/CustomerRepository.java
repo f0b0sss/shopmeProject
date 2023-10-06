@@ -1,6 +1,6 @@
 package com.shopme.customer.repository;
 
-import com.shopme.common.entity.enums.AuthenticationType;
+import com.shopme.common.entity.AuthenticationType;
 import com.shopme.common.entity.Customer;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -6,10 +6,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "shipping_rates")
-public class ShippingRate {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+public class ShippingRate extends IdBasedEntity{
 
 	private float rate;
 	private int days;
@@ -23,14 +20,6 @@ public class ShippingRate {
 
 	@Column(nullable = false, length = 45)
 	private String state;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public float getRate() {
 		return rate;

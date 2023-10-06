@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/fragments :: page_head('Checkout', tag)}">
+</head>
+<body>
+
+<div class="container-fluid">
+    <div th:insert="~{fragments/menu :: #menu-fragment}"></div>
+    <div th:replace="~{fragments/navigation :: search_nav}"></div>
+
+    <div class="text-center">
+        <h2>Checkout</h2>
+    </div>
+
+    <div class="row m-1">
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Shipping Information</h5>
+                </div>
+                <div class="card-body">
+                    <p>
+                        <b>Ship to:</b> &nbsp; [[${shippingAddress}]]
+                        <a th:href="@{/address_book(redirect=checkout)}">[Ship to another address]</a>
+                    </p>
+                    <p>
+                        <b>Days to deliver:</b>&nbsp; [[${checkoutInfo.deliverDays}]] day(s)
+                    </p>
+                    <p>
+                        <b>Expected deliver date:</b>&nbsp; [[${#dates.format(checkoutInfo.deliverDate, 'E, dd MMM
+                        yyyy')}]]
+                    </p>
+                </div>
+            </div>
+            <div class="card mt-3 mb-3">
+                <div class="card-header">
+                    <h5>Payment Method</h5>
+                </div>
+                <div class="card-body">
+                    <div th:if="${checkoutInfo.codSupported}">
+                        <p>
+                            <input type="radio"> Cash on Delivery
+                            &nbsp;
+                            <button class="btn btn-primary">Place Order with COD</button>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Order Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <table>
+                            <th:block th:each="item : ${cartItems}">
+                                <tr th:with="product = ${item.product}">
+                                    <td>[[${item.quantity}]] X &nbsp;&nbsp;</td>
+                                    <td width="70%">
+                                        <a th:href="@{'/p/' + ${product.alias}}" target="_blank">
+                                            [[${product.name}]]
+                                        </a>
+                                        <br>
+                                        <small>Ship:
+                                            <div th:replace="~{fragments/fragments :: format_currency(${item.shippingCost})}"></div>
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <div th:replace="~{fragments/fragments :: format_currency(${item.subTotal})}"></div>
+                                    </td>
+                                </tr>
+                            </th:block>
+                            <tr>
+                                <td colspan="3"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col">Product Total:</div>
+                        <div class="col">
+                            <div th:replace="~{fragments/fragments :: format_currency(${checkoutInfo.productTotal})}"></div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col">Shipping Total:</div>
+                        <div class="col">
+                            <div th:replace="~{fragments/fragments :: format_currency(${checkoutInfo.shippingCostTotal})}"></div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col">Payment Total:</div>
+                        <div class="col">
+                            <b>
+                                <div th:replace="~{fragments/fragments :: format_currency(${checkoutInfo.paymentTotal})}"></div>
+                            </b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div th:insert="~{fragments/footer :: #footer-fragment}"></div>
+</div>
+
+<script type="text/javascript">
+    // contextPath = "[[@{/}]]";
+    // const csrfHeaderName = "[[${_csrf.headerName}]]";
+    // let csrfValue = "[[${_csrf.token}]]";
+    //
+    // decimalDigits = [[${DECIMAL_DIGITS}]];
+    // decimalPointType = "[[${DECIMAL_POINT_TYPE}]]";
+    // thousandsPointType = "[[${THOUSANDS_POINT_TYPE}]]";
+</script>
+
+<!--<script th:src="@{/js/jquery.number.min.js}"></script>-->
+<!--<script th:src="@{/js/shopping_cart.js}"></script>-->
+<!--<script th:src="@{/js/common_modal.js}"></script>-->
+</body>
+</html>

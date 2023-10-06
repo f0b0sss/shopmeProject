@@ -62,13 +62,13 @@ public class ShoppingCartRestController {
         }
     }
 
-    @DeleteMapping("/cart/remove/{productId}")
-    public String removeProduct(@PathVariable Long productId,
+    @DeleteMapping("/cart/remove/{id}")
+    public String removeProduct(@PathVariable Long id,
                                  HttpServletRequest request) {
         try {
             Customer customer = getAuthenticatedCustomer(request);
 
-            shoppingCartService.removeProduct(productId, customer);
+            shoppingCartService.removeProduct(id, customer);
 
             return "The product has been removed from your shopping cart";
         } catch (CustomerNotFoundException e) {

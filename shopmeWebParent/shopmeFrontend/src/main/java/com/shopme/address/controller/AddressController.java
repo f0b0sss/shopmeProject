@@ -77,16 +77,16 @@ public class AddressController {
         address.setCustomer(customer);
         addressService.save(address);
 
-//        String redirectOption = request.getParameter("redirect");
-//        String redirectURL = "redirect:/address_book";
-//
-//        if ("checkout".equals(redirectOption)) {
-//            redirectURL += "?redirect=checkout";
-//        }
+        String redirectOption = request.getParameter("redirect");
+        String redirectURL = "redirect:/address_book";
+
+     if ("checkout".equals(redirectOption)) {
+            redirectURL += "?redirect=checkout";
+        }
 
         ra.addFlashAttribute("message", "The address has been saved successfully.");
 
-        return "redirect:/address_book";
+        return redirectURL;
     }
 
     @GetMapping("/address_book/edit/{addressId}")
@@ -118,11 +118,20 @@ public class AddressController {
 
     @GetMapping("/address_book/default/{addressId}")
     public String setDefault(@PathVariable Long addressId,
-                                HttpServletRequest request) {
+                             HttpServletRequest request) {
         Customer customer = getAuthenticatedCustomer(request);
+
+        String redirectOption = request.getParameter("redirect");
+        String redirectURL = "redirect:/address_book";
+
+        if ("cart".equals(redirectOption)) {
+            redirectURL = "redirect:/cart";
+        }else if ("checkout".equals(redirectOption)) {
+            redirectURL = "redirect:/checkout";
+        }
 
         addressService.setDefaultAddress(addressId, customer.getId());
 
-        return "redirect:/address_book";
+        return redirectURL;
     }
 }
