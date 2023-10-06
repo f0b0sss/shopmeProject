@@ -1,4 +1,4 @@
-package com.shopme.setting.controller;
+package com.shopme.setting.state.controller;
 
 import com.shopme.common.entity.Country;
 import com.shopme.common.entity.State;

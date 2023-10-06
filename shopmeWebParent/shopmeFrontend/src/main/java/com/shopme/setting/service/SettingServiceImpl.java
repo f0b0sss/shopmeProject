@@ -2,6 +2,7 @@ package com.shopme.setting.service;
 
 import com.shopme.common.entity.setting.Setting;
 import com.shopme.common.entity.setting.SettingCategory;
+import com.shopme.setting.CurrencySettingBag;
 import com.shopme.setting.EmailSettingBag;
 import com.shopme.setting.repository.SettingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,13 @@ public class SettingServiceImpl implements SettingService {
         EmailSettingBag settingBag = new EmailSettingBag(settings);
 
         return new EmailSettingBag(settings);
+    }
+
+    @Override
+    public CurrencySettingBag getCurrencySettings(){
+        List<Setting> settings = settingRepository.findByCategory(SettingCategory.CURRENCY);
+
+        return new CurrencySettingBag(settings);
     }
 
 
