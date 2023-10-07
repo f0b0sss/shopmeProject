@@ -1,6 +1,8 @@
 package com.shopme.ckeckout;
 
 import com.shopme.address.service.AddressService;
+import com.shopme.ckeckout.paypal.PayPalApiException;
+import com.shopme.ckeckout.paypal.PayPalService;
 import com.shopme.common.entity.Address;
 import com.shopme.common.entity.CartItem;
 import com.shopme.common.entity.Customer;
@@ -11,6 +13,7 @@ import com.shopme.customer.service.CustomerService;
 import com.shopme.order.service.OrderService;
 import com.shopme.setting.CurrencySettingBag;
 import com.shopme.setting.EmailSettingBag;
+import com.shopme.setting.PaymentSettingBag;
 import com.shopme.setting.service.SettingService;
 import com.shopme.shipping.service.ShippingRateService;
 import com.shopme.shoppingCart.service.ShoppingCartService;
@@ -37,39 +40,53 @@ import java.util.List;
 public class CheckoutController {
     @Autowired
     private CheckoutService checkoutService;
-//    @Autowired private ControllerHelper controllerHelper;
-    @Autowired private AddressService addressService;
-    @Autowired private ShippingRateService shippingRateService;
-    @Autowired private ShoppingCartService shoppingCartService;
-    @Autowired private CustomerService customerService;
-    @Autowired private OrderService orderService;
-    @Autowired private SettingService settingService;
-//    @Autowired private PayPalService paypalService;
+    //    @Autowired private ControllerHelper controllerHelper;
+    @Autowired
+    private AddressService addressService;
+    @Autowired
+    private ShippingRateService shippingRateService;
+    @Autowired
+    private ShoppingCartService shoppingCartService;
+    @Autowired
+    private CustomerService customerService;
+    @Autowired
+    private OrderService orderService;
+    @Autowired
+    private SettingService settingService;
+    @Autowired
+    private PayPalService paypalService;
 
     @GetMapping
-    public String showCheckoutPage(Model model, HttpServletRequest request){
+    public String showCheckoutPage(Model model, HttpServletRequest request) {
         Customer customer = getAuthenticatedCustomer(request);
 
         Address defaultAddress = addressService.getDefaultAddress(customer);
         ShippingRate shippingRate = null;
 
-        if (defaultAddress != null){
+        if (defaultAddress != null) {
             model.addAttribute("shippingAddress", defaultAddress.toString());
             shippingRate = shippingRateService.getShippingRateForAddress(defaultAddress);
-        }else {
+        } else {
             model.addAttribute("shippingAddress", customer.toString());
             shippingRate = shippingRateService.getShippingRateForCustomer(customer);
         }
 
-        if (shippingRate == null){
+        if (shippingRate == null) {
             return "redirect:/cart";
         }
 
         List<CartItem> cartItems = shoppingCartService.cartItemList(customer);
         CheckoutInfo checkoutInfo = checkoutService.prepareCheckout(cartItems, shippingRate);
 
+        String currencyCode = settingService.getCurrencyCode();
+        PaymentSettingBag paymentSettings = settingService.getPaymentSettings();
+        String paypalClientID = paymentSettings.getClientID();
+
+        model.addAttribute("customer", customer);
         model.addAttribute("checkoutInfo", checkoutInfo);
         model.addAttribute("cartItems", cartItems);
+        model.addAttribute("currencyCode", currencyCode);
+        model.addAttribute("paypalClientID", paypalClientID);
 
         return "checkout/checkout";
     }
@@ -90,9 +107,9 @@ public class CheckoutController {
         Address defaultAddress = addressService.getDefaultAddress(customer);
         ShippingRate shippingRate = null;
 
-        if (defaultAddress != null){
+        if (defaultAddress != null) {
             shippingRate = shippingRateService.getShippingRateForAddress(defaultAddress);
-        }else {
+        } else {
             shippingRate = shippingRateService.getShippingRateForCustomer(customer);
         }
 
@@ -140,5 +157,31 @@ public class CheckoutController {
 
         helper.setText(content, true);
         mailSender.send(message);
+    }
+
+    @PostMapping("/process_paypal_order")
+    public String processPayPalOrder(HttpServletRequest request, Model model)
+            throws UnsupportedEncodingException, MessagingException {
+        String orderId = request.getParameter("orderId");
+
+        String pageTitle = "Checkout Failure";
+        String message = null;
+
+        try {
+            if (paypalService.validateOrder(orderId)) {
+                return placeOrder(request);
+            } else {
+                pageTitle = "Checkout Failure";
+                message = "ERROR: Transaction could not be completed because order information is invalid";
+            }
+        } catch (PayPalApiException e) {
+            message = "ERROR: Transaction failed due to error: " + e.getMessage();
+        }
+
+        model.addAttribute("pageTitle", pageTitle);
+        model.addAttribute("title", pageTitle);
+        model.addAttribute("message", message);
+
+        return "message";
     }
 }

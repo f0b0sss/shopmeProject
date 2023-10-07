@@ -43,8 +43,16 @@
                             <p>
                                 <input type="radio" name="paymentMethod" id="radioCOD" value="COD"> Cash on Delivery
                                 &nbsp;
-                                <button type="submit" class="btn btn-primary d-none" id="buttonSubmitCOD">Place Order with COD</button>
+                                <button type="submit" class="btn btn-primary d-none" id="buttonSubmitCOD">Place Order
+                                    with COD
+                                </button>
                             </p>
+                        </form>
+                    </div>
+                    <div id="paypal_button_container">
+                        <form th:action="@{checkout/process_paypal_order}" method="post" id="paypalForm">
+                            <input hidden name="orderId" id="orderId">
+                            <input hidden name="paymentMethod" value="PAYPAL">
                         </form>
                     </div>
                 </div>
@@ -109,7 +117,7 @@
     <div th:insert="~{fragments/footer :: #footer-fragment}"></div>
 </div>
 
-
+<script th:src="@{https://www.paypal.com/sdk/js(client-id=${paypalClientID}, currency=${currencyCode})}"></script>
 <script type="text/javascript">
     contextPath = "[[@{/}]]";
     const csrfHeaderName = "[[${_csrf.headerName}]]";
@@ -123,7 +131,71 @@
         $("#radioCOD").on("click", function () {
             $("#buttonSubmitCOD").removeClass("d-none");
         });
-    });
+    })
+
+    paypal.Buttons({
+        enableStandardCardFields: true,
+        createOrder: function (data, actions) {
+            //setup transaction
+            return actions.order.create({
+                intent: "CAPTURE", //make payment immediately
+                payer: {
+                    name: {
+                        given_name: "[[${customer.firstname}]]",
+                        surname: "[[${customer.lastname}]]",
+                    },
+                    address: {
+                        address_line_1: "[[${customer.addressLine1}]]",
+                        address_line_2: "[[${customer.addressLine2}]]",
+                        admin_area_1: "[[${customer.state}]]",
+                        admin_area_2: "[[${customer.city}]]",
+                        postal_code: "[[${customer.postalCode}]]",
+                        country_code: "[[${customer.country.code}]]"
+                    },
+                    email_address: "[[${customer.email}]]",
+                    phone: {
+                        phone_type: "MOBILE",
+                        phone_number: {
+                            national_number: "[[${customer.phoneNumber}]]"
+                        }
+                    }
+                },
+                purchase_units: [{
+                    amount: {
+                        value: "[[${checkoutInfo.paymentTotalForPayPal}]]",
+                        currency_code: "[[${currencyCode}]]"
+                    }
+                }],
+                application_context: {
+                    shipping_preference: "NO_SHIPPING"
+                }
+            });
+        },
+
+        onApprove: function (data, actions) {
+            //    buyer approved payment
+            return actions.order.capture().then(function (details) {
+                orderId = details.id;
+                validateOrder(orderId);
+            });
+
+        },
+
+        onCancel: function (data) {
+            //    buyer cancelled payment
+
+        },
+
+        onError: function (err) {
+            //    error that prevents buyer from doing checkout
+            showErrorModal("Something wrong with your address information, so payment will not work.");
+        }
+    }).render("#paypal_button_container");
+
+    function validateOrder(orderId) {
+        $("#orderId").val(orderId);
+        $("#paypalForm").submit();
+    }
 </script>
 
 <!--<script th:src="@{/js/jquery.number.min.js}"></script>-->

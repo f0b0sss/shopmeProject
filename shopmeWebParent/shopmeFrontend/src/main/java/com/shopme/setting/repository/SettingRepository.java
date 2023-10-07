@@ -14,4 +14,6 @@ public interface SettingRepository extends JpaRepository<Setting, String> {
 
     List<Setting> findByCategory(SettingCategory settingCategory);
 
+    Setting findByKey(String key);
+
 }
