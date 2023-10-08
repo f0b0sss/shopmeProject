@@ -29,11 +29,13 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests()
                 .requestMatchers("/users", "/users/**", "/settings", "/settings/**",
                         "/countries", "/countries/**", "/states", "/states/**").hasAuthority("Admin")
+                .requestMatchers("/countries/{id}/states").hasAnyAuthority("Admin", "Salesperson")
                 .requestMatchers("/categories", "/categories/**", "/brands", "/brands/**").hasAnyAuthority("Admin", "Editor")
                 .requestMatchers("/products", "/products/**", "/products/detail/**", "/products/page/**").hasAnyAuthority("Admin", "Editor", "Salesperson", "Shipper")
                 .requestMatchers("/products/save", "/products/edit/**", "/products/check_unique").hasAnyAuthority("Admin", "Editor", "Salesperson")
                 .requestMatchers("/products/new", "/products/delete/**").hasAnyAuthority("Admin", "Editor")
-                .requestMatchers("/customers/**", "/orders/**").hasAnyAuthority("Admin", "Salesperson")
+                .requestMatchers("/customers/**", "/orders/**", "get_shipping_cost").hasAnyAuthority("Admin", "Salesperson")
+                .requestMatchers("/orders/page/**", "/orders", "/orders/", "/orders/detail/**").hasAnyAuthority("Admin", "Salesperson", "Shipper")
                 .requestMatchers("/css/**", "/images/**", "/js/**", "/webfonts/**", "/fontawesome/**", "/webjars/**", "/richText/**").permitAll()
 //                .anyRequest().permitAll()
                 .anyRequest().authenticated()
@@ -56,6 +58,7 @@ public class WebSecurityConfig {
 //                .invalidateHttpSession(true)
 //                .and()
 //                .csrf().disable();
+        http.headers().frameOptions().sameOrigin();
         return http.build();
     }
 

@@ -5,9 +5,11 @@ import com.shopme.admin.paging.PagingAndSortingHelper;
 import com.shopme.admin.paging.PagingAndSortingParam;
 import com.shopme.admin.security.ShopmeUserDetails;
 import com.shopme.admin.setting.setting.service.SettingService;
-import com.shopme.common.entity.*;
+import com.shopme.common.entity.Country;
 import com.shopme.common.entity.order.Order;
 import com.shopme.common.entity.order.OrderDetail;
+import com.shopme.common.entity.order.OrderStatus;
+import com.shopme.common.entity.order.OrderTrack;
 import com.shopme.common.entity.product.Product;
 import com.shopme.common.entity.setting.Setting;
 import com.shopme.common.exception.OrderNotFoundException;
@@ -21,6 +23,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Set;
 
@@ -85,7 +90,6 @@ public class OrderController {
             ra.addFlashAttribute("message", ex.getMessage());
             return defaultRedirectURL;
         }
-
     }
 
     @GetMapping("/orders/delete/{id}")
@@ -108,6 +112,7 @@ public class OrderController {
             Order order = orderService.get(id);
 
             List<Country> listCountries = orderService.listAllCountries();
+            loadCurrencySetting(request);
 
             model.addAttribute("pageTitle", "Edit Order (ID: " + id + ")");
             model.addAttribute("order", order);
@@ -116,6 +121,7 @@ public class OrderController {
             return "orders/order_form";
 
         } catch (OrderNotFoundException ex) {
+            System.out.println("hi1");
             ra.addFlashAttribute("message", ex.getMessage());
             return defaultRedirectURL;
         }
@@ -128,7 +134,7 @@ public class OrderController {
         order.setCountry(countryName);
 
         updateProductDetails(order, request);
-//        updateOrderTracks(order, request);
+        updateOrderTracks(order, request);
 
         orderService.save(order);
 
@@ -136,37 +142,6 @@ public class OrderController {
 
         return defaultRedirectURL;
     }
-
-//    private void updateOrderTracks(Order order, HttpServletRequest request) {
-//        String[] trackIds = request.getParameterValues("trackId");
-//        String[] trackStatuses = request.getParameterValues("trackStatus");
-//        String[] trackDates = request.getParameterValues("trackDate");
-//        String[] trackNotes = request.getParameterValues("trackNotes");
-//
-//        List<OrderTrack> orderTracks = order.getOrderTracks();
-//        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
-//
-//        for (int i = 0; i < trackIds.length; i++) {
-//            OrderTrack trackRecord = new OrderTrack();
-//
-//            Integer trackId = Integer.parseInt(trackIds[i]);
-//            if (trackId > 0) {
-//                trackRecord.setId(trackId);
-//            }
-//
-//            trackRecord.setOrder(order);
-//            trackRecord.setStatus(OrderStatus.valueOf(trackStatuses[i]));
-//            trackRecord.setNotes(trackNotes[i]);
-//
-//            try {
-//                trackRecord.setUpdatedTime(dateFormatter.parse(trackDates[i]));
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//
-//            orderTracks.add(trackRecord);
-//        }
-//    }
 
     private void updateProductDetails(Order order, HttpServletRequest request) {
         String[] detailIds = request.getParameterValues("detailId");
@@ -180,13 +155,6 @@ public class OrderController {
         Set<OrderDetail> orderDetails = order.getOrderDetails();
 
         for (int i = 0; i < detailIds.length; i++) {
-            System.out.println("Detail ID: " + detailIds[i]);
-            System.out.println("\t Prodouct ID: " + productIds[i]);
-            System.out.println("\t Cost: " + productDetailCosts[i]);
-            System.out.println("\t Quantity: " + quantities[i]);
-            System.out.println("\t Subtotal: " + productSubtotals[i]);
-            System.out.println("\t Ship cost: " + productShipCosts[i]);
-
             OrderDetail orderDetail = new OrderDetail();
             Long detailId = Long.parseLong(detailIds[i]);
             if (detailId > 0) {
@@ -202,8 +170,37 @@ public class OrderController {
             orderDetail.setUnitPrice(Float.parseFloat(productPrices[i]));
 
             orderDetails.add(orderDetail);
-
         }
+    }
 
+    private void updateOrderTracks(Order order, HttpServletRequest request) {
+        String[] trackIds = request.getParameterValues("trackId");
+        String[] trackStatuses = request.getParameterValues("trackStatus");
+        String[] trackDates = request.getParameterValues("trackDate");
+        String[] trackNotes = request.getParameterValues("trackNotes");
+
+        List<OrderTrack> orderTracks = order.getOrderTracks();
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
+
+        for (int i = 0; i < trackIds.length; i++) {
+            OrderTrack trackRecord = new OrderTrack();
+
+            Long trackId = Long.parseLong(trackIds[i]);
+            if (trackId > 0) {
+                trackRecord.setId(trackId);
+            }
+
+            trackRecord.setOrder(order);
+            trackRecord.setStatus(OrderStatus.valueOf(trackStatuses[i]));
+            trackRecord.setNotes(trackNotes[i]);
+
+            try {
+                trackRecord.setUpdatedTime(dateFormatter.parse(trackDates[i]));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            orderTracks.add(trackRecord);
+        }
     }
 }

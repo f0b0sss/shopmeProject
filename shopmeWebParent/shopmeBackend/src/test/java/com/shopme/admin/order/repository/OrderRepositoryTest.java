@@ -1,11 +1,8 @@
 package com.shopme.admin.order.repository;
 
 import com.shopme.common.entity.Customer;
-import com.shopme.common.entity.order.Order;
-import com.shopme.common.entity.order.OrderDetail;
+import com.shopme.common.entity.order.*;
 import com.shopme.common.entity.product.Product;
-import com.shopme.common.entity.order.OrderStatus;
-import com.shopme.common.entity.order.PaymentMethod;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -14,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.annotation.Rollback;
 
 import java.util.Date;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -65,8 +63,29 @@ class OrderRepositoryTest {
     }
 
     @Test
-    public void createNewOrderWithMultipleProducts(){
+    public void testUpdateOrderTracks() {
+        Long orderId = 11L;
+        Order order = orderRepository.findById(orderId).get();
 
+        OrderTrack newTrack = new OrderTrack();
+        newTrack.setOrder(order);
+        newTrack.setUpdatedTime(new Date());
+        newTrack.setStatus(OrderStatus.PICKED);
+        newTrack.setNotes(OrderStatus.PICKED.defaultDescription());
+
+        OrderTrack processingTrack = new OrderTrack();
+        processingTrack.setOrder(order);
+        processingTrack.setUpdatedTime(new Date());
+        processingTrack.setStatus(OrderStatus.PACKAGED);
+        processingTrack.setNotes(OrderStatus.PACKAGED.defaultDescription());
+
+        List<OrderTrack> orderTracks = order.getOrderTracks();
+        orderTracks.add(newTrack);
+        orderTracks.add(processingTrack);
+
+        Order updatedOrder = orderRepository.save(order);
+
+        assertThat(updatedOrder.getOrderTracks()).hasSizeGreaterThan(1);
     }
 
 

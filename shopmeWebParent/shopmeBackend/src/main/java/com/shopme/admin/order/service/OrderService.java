@@ -17,4 +17,6 @@ public interface OrderService {
     List<Country> listAllCountries();
 
     void save(Order orderInForm);
+
+    void updateStatus(Long orderId, String status);
 }

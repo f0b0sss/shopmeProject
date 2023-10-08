@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <th:block th:insert="~{fragments/head-link :: link}"></th:block>
+    <th:block th:insert="~{fragments/head-script :: script}"></th:block>
+
+    <title>Manage Orders</title>
+
+</head>
+<body>
+<div class="container-fluid">
+        <div th:insert="~{fragments/menu :: #menu-fragment}"></div>
+
+        <div>
+            <h2>Manage Orders | [[${pageTitle}]]</h2>
+        </div>
+        <form th:action="@{/order/save}" th:object="${order}" method="post"
+              onsubmit="return processFormBeforeSubmit();">
+            <input type="hidden" th:field="*{id}">
+            <div>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="overview-tab" data-bs-toggle="tab" href="#overview" role="tab">Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="products-tab" data-bs-toggle="tab" href="#products"
+                           role="tab">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="shipping-tab" data-bs-toggle="tab" href="#shipping"
+                           role="tab">Shipping</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="track-tab" data-bs-toggle="tab" href="#track" role="tab">Track</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active p-3" id="overview" role="tabpanel">
+                        <div th:replace="~{orders/order_form_overview :: content}"></div>
+                    </div>
+
+                    <div class="tab-pane fade p-3" id="products" role="tabpanel">
+                        <div th:replace="~{orders/order_form_products :: content}"></div>
+                    </div>
+
+                    <div class="tab-pane fade p-3" id="shipping" role="tabpanel">
+                        <div th:replace="~{orders/order_form_shipping :: content}"></div>
+                    </div>
+
+                    <div class="tab-pane fade p-3" id="track" role="tabpanel">
+                        <div th:replace="~{orders/order_form_tracks:: content}"></div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p class="text-center">
+                    <input type="submit" value="Save" class="btn btn-primary m-3"/>
+                    <input type="button" value="Cancel" class="btn btn-secondary" id="buttonCancel"/>
+                </p>
+            </div>
+        </form>
+
+        <div th:replace="~{html/modal_fragments :: modal_dialog}"></div>
+        <div th:replace="~{orders/add_product_modal :: content}"></div>
+
+        <div th:insert="~{fragments/footer :: #footer-fragment}"></div>
+
+</div>
+<script type="text/javascript">
+    contextPath = "[[@{/}]]";
+    var csrfHeaderName = "[[${_csrf.headerName}]]";
+    var csrfValue = "[[${_csrf.token}]]";
+    moduleURL = "[[@{/orders}]]";
+
+    decimalDigits = [[${DECIMAL_DIGITS}]];
+    decimalPointType = "[[${DECIMAL_POINT_TYPE}]]";
+    thousandsPointType = "[[${THOUSANDS_POINT_TYPE}]]";
+</script>
+<script th:src="@{/js/common_form.js}"></script>
+<script th:src="@{/js/common_form_country_state.js}"></script>
+<script th:src="@{/js/jquery.number.min.js}"></script>
+<script th:src="@{/js/order_form_overview_products.js}"></script>
+<script th:src="@{/js/order_form_add_product.js}"></script>
+<script th:src="@{/js/order_form_remove_product.js}"></script>
+<script th:src="@{/js/order_form_tracks.js}"></script>
+</body>
+</html>

@@ -52,6 +52,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void searchProducts(int pageNum, PagingAndSortingHelper helper) {
+        Pageable pageable = helper.createPageable(PRODUCTS_PER_PAGE, pageNum);
+        String keyword = helper.getKeyword();
+
+        Page<Product> page = repository.searchProductsByName(keyword, pageable);
+
+        helper.updateModelAttributes(pageNum, page);
+    }
+
+    @Override
     public Product get(Long id) throws ProductNotFoundException {
         try {
             return repository.findById(id).get();

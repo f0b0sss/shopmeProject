@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:fragment="page_head(title, remove)" th:remove="${remove}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <th:block th:insert="~{fragments/head-link :: link}"></th:block>
     <th:block th:insert="~{fragments/head-script :: script}"></th:block>
-    <title>Title</title>
+    <title>[[${title}]]</title>
 </head>
 <body>
 

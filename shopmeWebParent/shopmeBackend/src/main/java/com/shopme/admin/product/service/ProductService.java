@@ -10,6 +10,9 @@ public interface ProductService {
     List<Product> listAll();
 
     void listAllByPage(int pageNum, PagingAndSortingHelper helper, Long categoryId);
+
+    void searchProducts(int pageNum, PagingAndSortingHelper helper);
+
     Product get(Long id) throws ProductNotFoundException;
 
     Product save(Product product);

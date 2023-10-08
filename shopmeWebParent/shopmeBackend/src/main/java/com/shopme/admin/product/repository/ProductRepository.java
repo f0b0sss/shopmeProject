@@ -37,4 +37,6 @@ public interface ProductRepository extends SearchRepository<Product, Long> {
     @Modifying
     void updateEnabledStatus(Long id, boolean enabled);
 
+    @Query("select p from Product p where p.name like %?1%")
+    Page<Product> searchProductsByName(String keyword, Pageable pageable);
 }

@@ -49,7 +49,7 @@
             </div>
 
             <div>
-                List:price:
+                List price:
                 <span th:if="${product.discountPercent <= 0}"><div th:replace="~{products/product_fragments :: price_fragment(${product.price})}"></div></span>
                 <del th:if="${product.discountPercent > 0}"><span><div th:replace="~{products/product_fragments :: price_fragment(${product.price})}"></div></span></del>
             </div>
