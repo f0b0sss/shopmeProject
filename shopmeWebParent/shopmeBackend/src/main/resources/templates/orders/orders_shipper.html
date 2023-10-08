@@ -13,7 +13,7 @@
 </head>
 <body>
 <div class="container-fluid">
-	<div th:replace="navigation :: menu"></div>
+	<div th:insert="~{fragments/menu :: #menu-fragment}"></div>
 	<div>
 		<h2>Manage Orders</h2>	
 	</div>
@@ -30,7 +30,7 @@
 							<span>Order ID #[[${order.id}]]</span>
 						</div>
 						<div class="col">
-							<div class="float-right">
+							<div class="float-end">
 								<a class="fas fa-file-alt fa-2x icon-green linkOrderDetail"
 									th:href="@{'/orders/detail/' + ${order.id}}"
 									title="View details of this order"
@@ -53,7 +53,7 @@
 						[[${order.phoneNumber}]]
 					</div>
 					<div th:if="${order.COD}">
-						<span>COD: <b><div th:replace="fragments :: format_currency(${order.total})"></div></b></span>
+						<span>COD: <b><div th:replace="~{html/fragments :: format_currency(${order.total})}"></div></b></span>
 					</div>
 					<div>&nbsp;</div>
 					<div class="row">
@@ -79,7 +79,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<h4 class="modal-title">Update Confirmation</h4>
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 				</div>
 				
 				<div class="modal-body">
@@ -88,7 +88,7 @@
 				
 				<div class="modal-footer">
 					<a class="btn btn-success" href="" id="yesButton">Yes</a>
-					<button type="button" class="btn btn-danger" id="noButton" data-dismiss="modal">No</button>
+					<button type="button" class="btn btn-danger" id="noButton" data-bs-dismiss="modal">No</button>
 				</div>
 			</div>
 		</div>

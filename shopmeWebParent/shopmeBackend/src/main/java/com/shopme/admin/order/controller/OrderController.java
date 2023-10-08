@@ -53,7 +53,11 @@ public class OrderController {
         orderService.listByPage(pageNum, helper);
         loadCurrencySetting(request);
 
-        if (!loggedUser.hasRole("Admin") && !loggedUser.hasRole("Salesperson") && loggedUser.hasRole("Shipper")) {
+//        if (!loggedUser.hasRole("Admin") && !loggedUser.hasRole("Salesperson") && loggedUser.hasRole("Shipper")) {
+//            return "orders/orders_shipper";
+//        }
+
+        if (!loggedUser.hasRole("Admin") && loggedUser.hasRole("Salesperson") || loggedUser.hasRole("Shipper")) {
             return "orders/orders_shipper";
         }
 
